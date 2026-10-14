@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كهف الأعداد الكريستالي - الرياضيات عالمي الممتع</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+        .crystal-glow {
+            filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.7));
+        }
+        .crystal-active {
+            filter: drop-shadow(0 0 25px rgba(34, 197, 94, 0.9));
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(34, 197, 94, 0.7)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(34, 197, 94, 1)); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        /* Custom scrollbar for certificate / modal */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.5);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- ثابت في جميع الشاشات: أسماء المعلمة والمديرة -->
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-purple-500/30 px-4 py-3 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center text-sm gap-2">
+            <div class="flex items-center gap-2 text-purple-300 font-bold">
+                <i class="fa-solid fa-gem text-amber-400 text-lg"></i>
+                <span>برنامج: الرياضيات عالمي الممتع</span>
+            </div>
+            <div class="flex items-center gap-6 text-slate-300 text-xs sm:text-sm">
+                <span class="bg-purple-950/60 px-3 py-1 rounded-full border border-purple-500/20">
+                    <i class="fa-solid fa-chalkboard-user text-purple-400 ml-1"></i> معلمة المادة: <strong class="text-white">نهلة يحيى القاضي</strong>
+                </span>
+                <span class="bg-purple-950/60 px-3 py-1 rounded-full border border-purple-500/20">
+                    <i class="fa-solid fa-school text-pink-400 ml-1"></i> مديرة المدرسة: <strong class="text-white">عبير حمود فرحان</strong>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-4 sm:p-6">
+        <div class="w-full max-w-3xl mx-auto">
+
+            <!-- 1. شاشة البداية -->
+            <section id="screen-welcome" class="bg-slate-950/70 border border-purple-500/30 backdrop-blur-xl rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
+                <div class="absolute -top-12 -right-12 w-48 h-48 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="mb-6 floating inline-block">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 mx-auto bg-gradient-to-tr from-purple-600 to-pink-500 rounded-3xl flex items-center justify-center shadow-xl border-2 border-purple-300/40">
+                        <i class="fa-solid fa-user-astronaut text-5xl sm:text-6xl text-white"></i>
+                    </div>
+                </div>
+
+                <h1 class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-300 to-amber-300 mb-3">
+                    كهف الأعداد الكريستالي
+                </h1>
+                <p class="text-slate-300 text-sm sm:text-base max-w-lg mx-auto mb-8 leading-relaxed">
+                    مرحباً بك أيها المستكشف البطل في مغامرة شيقة لفصل <span class="text-amber-400 font-bold">القيمة المنزلية</span> (الصف الثالث الابتدائي). ساعد بطلنا في جمع الكريستالات وفتح الأبواب المغلقة!
+                </p>
+
+                <form id="form-login" onsubmit="startAdventure(event)" class="max-w-md mx-auto space-y-4 text-right">
+                    <div>
+                        <label class="block text-sm font-bold text-purple-300 mb-2">
+                            <i class="fa-solid fa-signature ml-1 text-pink-400"></i> اسم الطالب الثلاثي الكامل:
+                        </label>
+                        <input type="text" id="student-name" required placeholder="مثال: أحمد محمد عبد الله"
+                            class="w-full px-4 py-3 bg-slate-900/90 border border-purple-500/40 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-400 text-center font-bold text-lg">
+                    </div>
+                    <button type="submit"
+                        class="w-full py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 hover:from-purple-500 hover:to-amber-400 text-white font-black text-lg rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-3 border border-white/20">
+                        <span>ابدأ المغامرة الكريستالية</span>
+                        <i class="fa-solid fa-compass text-xl"></i>
+                    </button>
+                </form>
+            </section>
+
+            <!-- 2. شاشة اللعب والألغاز -->
+            <section id="screen-game" class="hidden bg-slate-950/80 border border-purple-500/30 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+                <!-- شريط تقدم الكريستالات والأبواب -->
+                <div class="flex flex-col sm:flex-row justify-between items-center mb-6 pb-4 border-b border-purple-900/50 gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-purple-900/50 flex items-center justify-center border border-purple-500/40 text-purple-300 font-bold" id="explorer-avatar">
+                            <i class="fa-solid fa-child-reaching"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 block">المستكشف البطل:</span>
+                            <span id="display-student-name" class="font-bold text-amber-300 text-sm"></span>
+                        </div>
+                    </div>
+                    <!-- مؤشرات الكريستالات (5 ألغاز) -->
+                    <div class="flex items-center gap-2 bg-slate-900/80 px-4 py-2 rounded-2xl border border-purple-500/20" id="crystals-progress">
+                        <!-- تُعبأ برمجياً -->
+                    </div>
+                </div>
+
+                <!-- صندوق عرض اللغز الحالي -->
+                <div id="puzzle-container" class="transition-all duration-300">
+                    <!-- تُحقن أسئلة الألغاز هنا ديناميكياً -->
+                </div>
+
+                <!-- رسائل التوجيه الفوري والتصحيح -->
+                <div id="feedback-box" class="mt-4 hidden p-4 rounded-xl text-center font-bold text-sm sm:text-base transition-all duration-300"></div>
+            </section>
+
+            <!-- 3. شاشة إنجاز الكنز والشارة -->
+            <section id="screen-victory" class="hidden bg-slate-950/80 border border-amber-500/40 backdrop-blur-xl rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-b from-amber-500/10 to-purple-600/15 pointer-events-none"></div>
+
+                <div class="inline-block p-4 bg-amber-500/20 rounded-full border-2 border-amber-400/50 mb-4 floating">
+                    <i class="fa-solid fa-award text-6xl text-amber-400 crystal-glow"></i>
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl font-black text-amber-300 mb-2">ألف مبروك يا بطل!</h2>
+                <p id="victory-message" class="text-slate-200 text-base sm:text-lg mb-6"></p>
+
+                <!-- شارة المستكشف -->
+                <div class="max-w-xs mx-auto bg-gradient-to-b from-purple-900/80 to-slate-900 border-2 border-amber-400 rounded-3xl p-6 mb-8 shadow-2xl relative">
+                    <div class="absolute -top-3 right-1/2 translate-x-1/2 bg-amber-400 text-slate-950 font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider">
+                        شارة رسمية
+                    </div>
+                    <div class="w-20 h-20 mx-auto bg-amber-400/20 rounded-full flex items-center justify-center border border-amber-400 mb-4">
+                        <i class="fa-solid fa-gem text-4xl text-amber-300 crystal-active"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-white mb-1">مستكشف الأعداد</h3>
+                    <p class="text-xs text-purple-300 mb-3">فصل القيمة المنزلية - الصف الثالث الابتدائي</p>
+                    <div class="text-sm font-bold text-amber-200 bg-slate-950/60 py-2 px-3 rounded-xl border border-amber-500/30" id="badge-student-name">
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="openCertificateModal()"
+                        class="px-6 py-3.5 bg-gradient-to-r from-amber-500 to-pink-600 hover:from-amber-400 hover:to-pink-500 text-slate-950 font-black rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-certificate text-lg"></i>
+                        <span>عرض شهادة التقدير</span>
+                    </button>
+                    <button onclick="restartGame()"
+                        class="px-6 py-3.5 bg-slate-800 hover:bg-slate-700 text-purple-300 font-bold rounded-xl border border-purple-500/30 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>إعادة المغامرة</span>
+                    </button>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Modal الشهادة -->
+    <div id="certificate-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center p-4 z-50 overflow-y-auto">
+        <div class="bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 border-4 border-amber-400 rounded-3xl p-6 sm:p-10 max-w-2xl w-full shadow-2xl relative text-slate-900 my-8" id="certificate-printable">
+            
+            <!-- زر إغلاق المودال -->
+            <button onclick="closeCertificateModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white text-xl p-2 rounded-full bg-slate-800/80 sm:block no-print">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- محتوى الشهادة (تصميم رسمي أنيق) -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 text-center border-4 border-amber-300 shadow-inner relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-amber-100 rounded-bl-full pointer-events-none opacity-50"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-purple-100 rounded-tr-full pointer-events-none opacity-50"></div>
+
+                <div class="flex justify-between items-center text-xs text-slate-500 mb-2 font-bold">
+                    <span>برنامج: الرياضيات عالمي الممتع</span>
+                    <span id="cert-date">التاريخ: 2026/10/14</span>
+                </div>
+
+                <div class="w-16 h-16 mx-auto bg-amber-400 rounded-2xl flex items-center justify-center shadow-md mb-3 text-white">
+                    <i class="fa-solid fa-award text-3xl"></i>
+                </div>
+
+                <h3 class="text-2xl sm:text-3xl font-black text-purple-950 mb-1">شهادة تقدير وتفوق</h3>
+                <p class="text-xs sm:text-sm text-purple-700 font-bold mb-4">بطل القيمة المنزلية - الصف الثالث الابتدائي</p>
+
+                <p class="text-sm text-slate-600 mb-2">تمنح هذه الشهادة بفخر واعتزاز للطالب(ة) البطل:</p>
+                <div class="text-xl sm:text-2xl font-black text-amber-600 bg-amber-50 py-2.5 px-4 rounded-xl border border-amber-200 mb-6 inline-block w-full max-w-md shadow-sm" id="cert-student-name">
+                </div>
+
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-8 max-w-md mx-auto">
+                    وذلك لإنجازهم المتميز واجتيازهم لجميع ألغاز «كهف الأعداد الكريستالي» بنجاح وإتقان مهارات القيمة المنزلية للفصل الدراسي الأول.
+                </p>
+
+                <!-- تواقيع المعلمة والمديرة -->
+                <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-200 text-xs sm:text-sm">
+                    <div class="text-right">
+                        <span class="text-slate-500 block">معلمة المادة:</span>
+                        <strong class="text-purple-950 text-sm sm:text-base font-black">نهلة يحيى القاضي</strong>
+                    </div>
+                    <div class="text-left">
+                        <span class="text-slate-500 block">مديرة المدرسة:</span>
+                        <strong class="text-purple-950 text-sm sm:text-base font-black">عبير حمود فرحان</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- أزرار التحكم بالشهادة (طباعة / حفظ PDF) -->
+            <div class="flex justify-center gap-4 mt-6 no-print">
+                <button onclick="printCertificate()"
+                    class="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i>
+                    <span>طباعة / حفظ كـ PDF</span>
+                </button>
+                <button onclick="closeCertificateModal()"
+                    class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition">
+                    إغلاق
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات اللعبة والألغاز المستوحاة من منهج الصف الثالث الابتدائي (الفصل الأول: القيمة المنزلية)
+        let studentFullName = "";
+        let currentPuzzleIndex = 0;
+        let attemptsCount = 0;
+
+        const puzzles = [
+            {
+                id: 1,
+                title: "اللغز الأول: تحديد قيمة الرقم (القيمة المنزلية)",
+                description: "الباب الأول مغلق بكلمة سر كريستالية! ما هي القيمة المنزلية للرقم <span class='text-amber-400 font-black text-xl'>7</span> في العدد الرباعي: <span class='text-pink-300 font-black text-xl'>4,725</span> ؟",
+                options: [
+                    { text: "70", value: "70", hint: "تذكّر: الرقم 7 يقع في منزلة العشرات (عشرة واحدة = 10)." },
+                    { text: "700", value: "700", correct: true, hint: "ممتاز! الرقم 7 في منزلة المئات وقيمته المنزلية 700." },
+                    { text: "7,000", value: "7000", hint: "تذكّر: منزلة الآلاف هي الرقم 4، أما 7 ففي المئات." },
+                    { text: "7", value: "7", hint: "العدد 7 ليس في الآحاد، انظر جيداً إلى منزلة الرقم." }
+                ]
+            },
+            {
+                id: 2,
+                title: "اللغز الثاني: قراءة الأعداد وكتابتها",
+                description: "أمامك ممر سحري يتطلب اختيار الشكل الصحيح للعدد المكتوب باللفظ: <span class='text-amber-400 font-black text-lg'>«ثلاثة آلاف وخمسمائة وثمانية عشر»</span> بالحوت القياسي (الأرقام):",
+                options: [
+                    { text: "3,581", value: "3581", hint: "انتبه لترتيب العشرات والآحاد (ثمانية عشر تعني 18 وليست 81)." },
+                    { text: "3,851", value: "3851", hint: "ركز في قراءة المئات (خمسمائة يعني 5 في المئات)." },
+                    { text: "3,518", value: "3518", correct: true, hint: "إجابة صحيحة رائعة! 3 آلاف، و500، و18." },
+                    { text: "5,318", value: "5318", hint: "تأكد من منزلة الآلاف (ثلاثة آلاف تعني 3 في البداية)." }
+                ]
+            },
+            {
+                id: 3,
+                title: "اللغز الثالث: الصورة التحليلية للأعداد",
+                description: "لفتح الصندوق الكريستالي الثاني، اكتب أو اختر الصورة التحليلية الصحيحة للعدد: <span class='text-pink-300 font-black text-xl'>6,243</span> :",
+                options: [
+                    { text: "600 + 200 + 40 + 3", value: "opt1", hint: "تأكد من منزلة الآلاف (ستة آلاف وليست ست المئات)." },
+                    { text: "6,000 + 200 + 40 + 3", value: "opt2", correct: true, hint: "أحسنت! 3 آحاد + 40 عشرات + 200 مئات + 6,000 آلاف." },
+                    { text: "6,000 + 20 + 400 + 3", value: "opt3", hint: "انتبه لموقع منزلة المئات والعشرات، رتبها من الأصغر للأكبر أو العكس." },
+                    { text: "6 + 2 + 4 + 3", value: "opt4", hint: "هذه هي أرقام وليست قيمها المنزلية." }
+                ]
+            },
+            {
+                id: 4,
+                title: "اللغز الرابع: مقارنة وترتيب الأعداد",
+                description: "أي مجموعة أعداد مما يلي مرتبة ترتيباً <span class='text-amber-400 font-black'>تصاعدياً</span> (من الأصغر إلى الأكبر) بشكل صحيح؟",
+                options: [
+                    { text: "4,210 ، 4,250 ، 4,190", value: "opt1", hint: "العدد 4,190 أصغر من 4,250، فلا يمكن أن يأتي في النهاية هنا." },
+                    { text: "2,300 ، 2,450 ، 2,480", value: "opt2", correct: true, hint: "صحيح تماماً! الأعداد تزداد تدريجياً: 2,300 ثم 2,450 ثم 2,480." },
+                    { text: "5,600 ، 5,400 ، 5,100", value: "opt3", hint: "هذا ترتيب تنازلي (من الأكبر للأصغر) وليس تصاعدياً." },
+                    { text: "1,200 ، 1,500 ، 1,100", value: "opt4", hint: "العدد 1,100 أصغر من 1,200، لماذا جاء في الأخير؟" }
+                ]
+            },
+            {
+                id: 5,
+                title: "اللغز الخامس: تقريب الأعداد إلى أقرب عشرة أو مئة",
+                description: "الباب الأخير للكنز! ما هو تقريب العدد <span class='text-amber-400 font-black text-xl'>47</span> إلى أقرب عشرة؟",
+                options: [
+                    { text: "40", value: "40", hint: "انظر إلى رقم الآحاد (7)، وهو عدد كريم يمنح العشرات واحدًا." },
+                    { text: "50", value: "50", correct: true, hint: "رائع جداً! 7 في الآحاد عدد كريم (أكبر من 5)، فيُقرب 47 إلى 50." },
+                    { text: "45", value: "45", hint: "التقريب يكون إلى عشرات كاملة مثل 40 أو 50." },
+                    { text: "47", value: "47", hint: "التقريب يستبدل الآحاد بصفر ويعدل العشرات." }
+                ]
+            }
+        ];
+
+        function startAdventure(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById("student-name").value.trim();
+            if (!nameInput) return;
+
+            studentFullName = nameInput;
+            document.getElementById("display-student-name").innerText = studentFullName;
+            document.getElementById("badge-student-name").innerText = studentFullName;
+            document.getElementById("cert-student-name").innerText = studentFullName;
+
+            // ضبط تاريخ اليوم في الشهادة
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById("cert-date").innerText = "التاريخ: " + dateStr;
+
+            // الانتقال لشاشة اللعب
+            document.getElementById("screen-welcome").classList.add("hidden");
+            document.getElementById("screen-game").classList.remove("hidden");
+
+            renderProgress();
+            renderCurrentPuzzle();
+        }
+
+        function renderProgress() {
+            const container = document.getElementById("crystals-progress");
+            container.innerHTML = "";
+            puzzles.forEach((p, idx) => {
+                const icon = document.createElement("div");
+                icon.className = `w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                    idx < currentPuzzleIndex 
+                        ? "bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/50" 
+                        : idx === currentPuzzleIndex 
+                            ? "bg-amber-500 text-slate-950 animate-pulse border-2 border-white" 
+                            : "bg-slate-800 text-slate-500 border border-slate-700"
+                }`;
+                icon.innerHTML = idx < currentPuzzleIndex ? '<i class="fa-solid fa-check"></i>' : (idx + 1);
+                container.appendChild(icon);
+            });
+        }
+
+        function renderCurrentPuzzle() {
+            const puzzle = puzzles[currentPuzzleIndex];
+            const container = document.getElementById("puzzle-container");
+            const feedbackBox = document.getElementById("feedback-box");
+            feedbackBox.classList.add("hidden");
+            feedbackBox.innerHTML = "";
+
+            let html = `
+                <div class="mb-4">
+                    <span class="text-xs bg-purple-900/80 text-purple-300 px-3 py-1 rounded-full border border-purple-500/30">
+                        اللغز ${currentPuzzleIndex + 1} من ${puzzles.length}
+                    </span>
+                    <h3 class="text-xl sm:text-2xl font-black text-white mt-3 mb-2">${puzzle.title}</h3>
+                    <p class="text-slate-300 text-base sm:text-lg leading-relaxed bg-slate-900/60 p-4 rounded-2xl border border-purple-900/50">
+                        ${puzzle.description}
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+            `;
+
+            puzzle.options.forEach((opt, idx) => {
+                html += `
+                    <button onclick="checkAnswer('${opt.value}', ${opt.correct ? 'true' : 'false'}, '${opt.hint.replace(/'/g, "\\'")}')"
+                        class="p-4 bg-slate-900/90 hover:bg-purple-900/40 border border-purple-500/30 hover:border-amber-400 rounded-2xl text-right font-bold text-sm sm:text-base text-slate-200 transition transform active:scale-95 flex items-center justify-between group">
+                        <span class="w-8 h-8 rounded-xl bg-purple-950/80 border border-purple-500/40 flex items-center justify-center text-purple-300 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
+                            ${['أ', 'ب', 'ج', 'د'][idx]}
+                        </span>
+                        <span class="flex-grow mx-3">${opt.text}</span>
+                        <i class="fa-solid fa-chevron-left text-xs text-slate-500 group-hover:text-amber-400 transition"></i>
+                    </button>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function checkAnswer(selectedValue, isCorrect, hintText) {
+            const feedbackBox = document.getElementById("feedback-box");
+            feedbackBox.classList.remove("hidden");
+
+            if (isCorrect) {
+                feedbackBox.className = "mt-4 p-4 rounded-xl text-center font-bold text-sm sm:text-base bg-emerald-950/80 border border-emerald-500 text-emerald-300";
+                feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check ml-2 text-lg"></i> إجابة صحيحة بطلنا الرائع! لقد أضئت الكريستالة بنجاح.`;
+                
+                setTimeout(() => {
+                    currentPuzzleIndex++;
+                    if (currentPuzzleIndex < puzzles.length) {
+                        renderProgress();
+                        renderCurrentPuzzle();
+                    } else {
+                        showVictoryScreen();
+                    }
+                }, 1500);
+            } else {
+                feedbackBox.className = "mt-4 p-4 rounded-xl text-center font-bold text-sm sm:text-base bg-rose-950/80 border border-rose-500 text-rose-300";
+                feedbackBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation ml-2 text-lg"></i> إجابة غير صحيحة. تلميح مساعد: ${hintText} <span class='block text-xs mt-1 text-rose-200'>حاول مرة أخرى!</span>`;
+            }
+        }
+
+        function showVictoryScreen() {
+            document.getElementById("screen-game").classList.add("hidden");
+            document.getElementById("screen-victory").classList.remove("hidden");
+            document.getElementById("victory-message").innerHTML = `لقد أتممت جميع ألغاز الكهف الكريستالي ببراعة فائقة واستحقت شارة <span class="text-amber-400 font-bold">مستكشف الأعداد</span> بكل جدارة يا <span class="text-amber-300 font-bold">${studentFullName}</span>!`;
+        }
+
+        function restartGame() {
+            currentPuzzleIndex = 0;
+            document.getElementById("screen-victory").classList.add("hidden");
+            document.getElementById("screen-welcome").classList.remove("hidden");
+            document.getElementById("student-name").value = "";
+        }
+
+        function openCertificateModal() {
+            const modal = document.getElementById("certificate-modal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function closeCertificateModal() {
+            const modal = document.getElementById("certificate-modal");
+            modal.classList.remove("flex");
+            modal.classList.add("hidden");
+        }
+
+        function printCertificate() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
