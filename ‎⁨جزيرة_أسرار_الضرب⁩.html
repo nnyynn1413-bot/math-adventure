@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جزيرة أسرار الضرب</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Cairo & Tajawal) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        tajawal: ['Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #064e3b 0%, #0f5132 30%, #022c22 70%, #111827 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .island-glow {
+            text-shadow: 0 0 20px rgba(52, 211, 153, 0.7);
+        }
+        .gold-glow {
+            text-shadow: 0 0 15px rgba(251, 191, 36, 0.8);
+        }
+        .card-glass {
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(52, 211, 153, 0.25);
+        }
+        @keyframes floatHero {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1deg); }
+        }
+        .animate-hero {
+            animation: floatHero 3s ease-in-out infinite;
+        }
+        @keyframes pulseEmerald {
+            0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 35px rgba(16, 185, 129, 0.8); }
+        }
+        .emerald-pulse {
+            animation: pulseEmerald 2.5s infinite;
+        }
+        @keyframes islandMapMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 0; }
+        }
+        .map-bg {
+            background-color: #064e3b;
+            background-image: radial-gradient(rgba(52, 211, 153, 0.15) 2px, transparent 2px);
+            background-size: 24px 24px;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #certificate-modal, #certificate-modal * {
+                visibility: visible;
+            }
+            #certificate-modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-3 sm:p-6 select-none map-bg">
+
+    <!-- Official Header Banner -->
+    <header class="w-full max-w-4xl mx-auto mb-4 bg-slate-900/90 border border-emerald-500/40 rounded-2xl p-3 px-6 shadow-2xl flex flex-wrap justify-between items-center text-xs sm:text-sm text-emerald-200">
+        <div class="flex items-center gap-2 mb-1 sm:mb-0">
+            <span class="bg-gradient-to-r from-emerald-500/30 to-teal-500/30 px-3 py-1.5 rounded-full text-emerald-300 font-bold border border-emerald-400/40 flex items-center gap-2">
+                <i class="fa-solid fa-map-location-dot text-amber-400"></i>
+                برنامج الرياضيات عالمي الممتع
+            </span>
+        </div>
+        <div class="flex flex-wrap gap-4 font-semibold">
+            <div><i class="fa-solid fa-chalkboard-user ml-1.5 text-emerald-400"></i>معلمة المادة: <span class="text-white font-bold">نهلة يحيى القاضي</span></div>
+            <div><i class="fa-solid fa-school ml-1.5 text-emerald-400"></i>مديرة المدرسة: <span class="text-white font-bold">عبير حمود فرحان</span></div>
+        </div>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto flex-grow flex flex-col items-center justify-center">
+
+        <!-- Welcome Screen -->
+        <div id="screen-welcome" class="w-full card-glass rounded-3xl p-6 sm:p-10 shadow-2xl text-center flex flex-col items-center border border-emerald-500/40">
+            <div class="w-28 h-28 sm:w-36 sm:h-36 bg-gradient-to-br from-emerald-500/20 to-teal-600/30 rounded-full flex items-center justify-center border-4 border-emerald-400/70 mb-6 emerald-pulse animate-hero shadow-xl">
+                <i class="fa-solid fa-compass text-6xl sm:text-7xl text-amber-400"></i>
+            </div>
+            
+            <h1 class="text-3xl sm:text-5xl font-black text-emerald-300 mb-3 island-glow">جزيرة أسرار الضرب</h1>
+            <p class="text-emerald-100/90 text-sm sm:text-lg max-w-xl mb-6 leading-relaxed font-medium">
+                مرحباً بك أيها المستكشف الشجاع! تنتظرك جزيرة مليئة بالكنوز والأحجار السحرية والجسور القديمة. هل أنت مستعد لفك أسرار الفصل الخامس (الضرب 2) والوصول إلى الكنز النهائي لتصبح «خبير الضرب»؟
+            </p>
+
+            <form id="login-form" onsubmit="startAdventure(event)" class="w-full max-w-md flex flex-col gap-4">
+                <div class="text-right">
+                    <label for="student-name" class="block text-sm font-bold text-emerald-200 mb-2">
+                        <i class="fa-solid fa-user-astronaut ml-2 text-amber-400"></i>اسم الطالب الكامل (إلزامي):
+                    </label>
+                    <input type="text" id="student-name" required placeholder="أدخل اسمك الثلاثي هنا..."
+                        class="w-full px-4 py-3.5 rounded-xl bg-slate-800/90 border-2 border-emerald-500/50 text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 text-lg transition shadow-inner">
+                </div>
+                <button type="submit" 
+                    class="mt-2 w-full py-4 bg-gradient-to-r from-amber-500 via-emerald-500 to-teal-500 hover:from-amber-600 hover:to-teal-600 text-slate-950 font-black text-xl rounded-xl shadow-lg shadow-emerald-500/30 transform active:scale-95 transition flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-compass-drafting text-2xl"></i> ابدأ المغامرة واستكشف الجزيرة
+                </button>
+            </form>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="screen-game" class="w-full hidden flex flex-col gap-5">
+            <!-- Game Status & Score Bar -->
+            <div class="card-glass rounded-2xl p-4 flex flex-wrap justify-between items-center gap-4 border border-emerald-500/40">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/30 to-teal-500/30 border border-emerald-400 flex items-center justify-center text-amber-400 text-2xl font-bold">
+                        <i class="fa-solid fa-person-hiking"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400 font-semibold">المستكشف البطل</div>
+                        <div id="display-student-name" class="font-bold text-emerald-200 text-base sm:text-lg">اسم الطالب</div>
+                    </div>
+                </div>
+
+                <!-- Score and Gems -->
+                <div class="flex items-center gap-3">
+                    <div class="bg-slate-800/90 border border-amber-500/40 px-3.5 py-1.5 rounded-xl flex items-center gap-2">
+                        <i class="fa-solid fa-gem text-amber-400 text-lg"></i>
+                        <span id="gems-count" class="font-bold text-amber-300 text-lg">0</span>
+                    </div>
+                    <div class="bg-slate-800/90 border border-emerald-500/40 px-3.5 py-1.5 rounded-xl flex items-center gap-2">
+                        <i class="fa-solid fa-trophy text-emerald-400 text-lg"></i>
+                        <span id="score-count" class="font-bold text-emerald-300 text-lg">0</span>
+                    </div>
+                </div>
+
+                <!-- Progress Islands -->
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-center">
+                    <span class="text-xs text-slate-300 ml-1 font-bold">المحطات:</span>
+                    <div id="island-indicators" class="flex gap-2">
+                        <!-- Populated Dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Island Treasure Map Tracker -->
+            <div class="card-glass rounded-2xl p-4 border border-emerald-500/40 overflow-hidden relative">
+                <div class="text-xs text-slate-300 mb-2 flex justify-between items-center">
+                    <span><i class="fa-solid fa-route ml-1 text-amber-400"></i>مسار خريطة الجزيرة</span>
+                    <span id="location-tag" class="text-emerald-300 font-bold">الموقع: الجسر الحجري</span>
+                </div>
+                <!-- Track Line -->
+                <div class="h-12 w-full rounded-xl bg-slate-950 border border-slate-700 relative flex items-center px-4 overflow-hidden">
+                    <div class="absolute inset-0 h-1.5 top-1/2 -translate-y-1/2 bg-gradient-to-r from-amber-500/40 via-emerald-500/40 to-teal-500/40 w-full"></div>
+                    <div id="explorer-sprite" class="relative z-10 transition-all duration-700 ease-in-out flex items-center gap-2" style="right: 0%;">
+                        <div class="w-8 h-8 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center font-bold shadow-lg animate-hero">
+                            <i class="fa-solid fa-person-hiking"></i>
+                        </div>
+                        <span class="text-xs bg-emerald-500 text-slate-950 font-black px-2 py-0.5 rounded-md shadow">المستكشف</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Puzzle Container -->
+            <div class="card-glass rounded-3xl p-6 sm:p-10 shadow-2xl border border-emerald-500/40 relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-emerald-500/20 px-6 py-2 rounded-bl-2xl border-l border-b border-emerald-500/40 text-emerald-300 font-bold text-sm">
+                    اللغز <span id="current-puzzle-num">1</span> من 5
+                </div>
+
+                <div class="mt-4 mb-6">
+                    <span id="puzzle-category" class="bg-teal-500/20 border border-teal-400/40 text-teal-300 px-3 py-1 rounded-lg text-xs font-bold">
+                        تصنيف المهارة
+                    </span>
+                    <h2 id="puzzle-title" class="text-xl sm:text-2xl font-black text-emerald-300 mt-3">عنوان اللغز</h2>
+                    <p id="puzzle-desc" class="text-slate-200 text-sm sm:text-base mt-2 leading-relaxed">نص وصف اللغز والسؤال...</p>
+                </div>
+
+                <!-- Interactive Question View Area -->
+                <div id="puzzle-content" class="my-6">
+                    <!-- Dynamic rendering based on puzzle type -->
+                </div>
+
+                <!-- Interactive Feedback Message -->
+                <div id="feedback-box" class="hidden rounded-2xl p-4 mb-6 text-sm sm:text-base font-semibold flex items-center gap-3 transition-all">
+                    <!-- Dynamic HTML Feedback -->
+                </div>
+
+                <!-- Controls -->
+                <div class="flex justify-end gap-3">
+                    <button id="submit-answer-btn" onclick="checkAnswer()"
+                        class="px-8 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-black text-lg rounded-xl shadow-lg shadow-emerald-500/20 transform active:scale-95 transition flex items-center gap-2">
+                        <i class="fa-solid fa-key text-xl"></i> التحقق وفك السر
+                    </button>
+                    <button id="next-puzzle-btn" onclick="nextPuzzle()" style="display: none;"
+                        class="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-black text-lg rounded-xl shadow-lg shadow-amber-500/30 transform active:scale-95 transition flex items-center gap-2">
+                        <i class="fa-solid fa-forward text-xl"></i> الانطلاق للسر التالي
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Victory Screen -->
+        <div id="screen-victory" class="w-full hidden card-glass rounded-3xl p-6 sm:p-10 shadow-2xl text-center flex flex-col items-center border border-amber-500/40">
+            <div class="w-28 h-28 sm:w-36 sm:h-36 bg-amber-500/20 rounded-full flex items-center justify-center border-4 border-amber-400 mb-6 emerald-pulse animate-hero">
+                <i class="fa-solid fa-chest-filled text-6xl sm:text-7xl text-amber-300"></i>
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl font-black text-amber-300 mb-3 gold-glow">تم الكشف عن كنز جزيرة الضرب!</h1>
+            <p id="victory-message" class="text-emerald-100 text-base sm:text-lg max-w-xl mb-6 leading-relaxed">
+                مبارك يا بطل! لقد حللت جميع أسرار الضرب في الفصل الخامس بنجاح واقتدار، وعثرت على صندوق الكنز الذهبي!
+            </p>
+
+            <!-- Badge Display Card -->
+            <div class="bg-gradient-to-br from-amber-500/20 via-emerald-500/20 to-teal-600/30 border-2 border-amber-400/70 rounded-2xl p-6 mb-8 max-w-sm w-full shadow-2xl relative overflow-hidden">
+                <div class="absolute -top-6 -right-6 w-24 h-24 bg-amber-400/20 rounded-full blur-xl"></div>
+                <div class="text-amber-300 font-bold text-xs tracking-widest mb-1">شارة تميز رسمية</div>
+                <div class="text-3xl font-black text-white mb-2">⭐ خبير الضرب ⭐</div>
+                <div id="badge-student-name" class="text-emerald-200 font-bold text-lg">اسم الطالب</div>
+                <div class="text-xs text-slate-300 mt-2">منهج الرياضيات عالمي الممتع - الفصل الخامس</div>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 w-full max-w-md">
+                <button onclick="openCertificateModal()" 
+                    class="flex-1 py-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-black text-lg rounded-xl shadow-lg shadow-amber-500/30 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-certificate text-xl"></i> عرض وطباعة الشهادة
+                </button>
+                <button onclick="restartGame()" 
+                    class="px-6 py-4 bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/40 font-bold text-lg rounded-xl transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> رحلة جديدة
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Official Certificate Modal -->
+    <div id="certificate-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 z-50">
+        <div class="bg-white text-slate-900 rounded-3xl p-6 sm:p-10 max-w-3xl w-full shadow-2xl border-8 border-emerald-600 relative overflow-hidden flex flex-col justify-between">
+            <!-- Decorative Stars -->
+            <div class="absolute top-3 left-3 text-emerald-600 text-xl"><i class="fa-solid fa-star"></i></div>
+            <div class="absolute top-3 right-3 text-emerald-600 text-xl"><i class="fa-solid fa-star"></i></div>
+            <div class="absolute bottom-3 left-3 text-emerald-600 text-xl"><i class="fa-solid fa-star"></i></div>
+            <div class="absolute bottom-3 right-3 text-emerald-600 text-xl"><i class="fa-solid fa-star"></i></div>
+
+            <!-- Header -->
+            <div class="text-center mb-6">
+                <div class="text-emerald-800 font-black text-sm tracking-wider mb-1">المملكة العربية السعودية • برنامج الرياضيات عالمي الممتع</div>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-wide mt-2">شهادة خبير الضرب</h2>
+                <div class="w-36 h-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 mx-auto mt-2 rounded-full"></div>
+            </div>
+
+            <!-- Body -->
+            <div class="text-center my-6 space-y-4">
+                <p class="text-slate-600 text-base font-semibold">تمنح هذه الشهادة الفخرية والتقديرية بكل اعتزاز إلى المستكشف المبدع:</p>
+                <div id="cert-student-name" class="text-2xl sm:text-4xl font-black text-emerald-800 border-b-2 border-dashed border-emerald-400 pb-2 inline-block px-8">
+                    اسم الطالب
+                </div>
+                <p class="text-slate-700 text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-medium">
+                    لاجتيازه مغامرة «جزيرة أسرار الضرب» بنجاح وإتقانه مفاهيم وحقائق الضرب الأكبر (الضرب في 6، 7، 8، 9، وحقائق الضرب في 10 و 11 و 12)، واستخدام الخصائص كخاصية التجميع والإبدال والحل المتقن للمسائل اللفظية ضمن الفصل الدراسي الخامس للصف الثالث الابتدائي.
+                </p>
+                <div class="text-xs text-slate-500 font-bold" id="cert-date">تاريخ الإنجاز: --/--/----</div>
+            </div>
+
+            <!-- Signatures & Controls -->
+            <div class="flex justify-between items-end mt-8 pt-6 border-t border-slate-200 text-xs sm:text-sm font-bold">
+                <div class="text-center">
+                    <div class="text-slate-500 mb-1">معلمة المادة</div>
+                    <div class="text-slate-900 font-black">نهلة يحيى القاضي</div>
+                </div>
+                <div class="text-center no-print">
+                    <button onclick="window.print()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl shadow transition flex items-center gap-2">
+                        <i class="fa-solid fa-print"></i> طباعة / حفظ PDF
+                    </button>
+                    <button onclick="closeCertificateModal()" class="mt-2 text-slate-500 hover:text-slate-800 text-xs underline block mx-auto">
+                        إغلاق النافذة
+                    </button>
+                </div>
+                <div class="text-center">
+                    <div class="text-slate-500 mb-1">مديرة المدرسة</div>
+                    <div class="text-slate-900 font-black">عبير حمود فرحان</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center mt-6 text-xs text-emerald-300/70 font-semibold">
+        جميع الحقوق محفوظة © برنامج الرياضيات عالمي الممتع - الصف الثالث الابتدائي
+    </footer>
+
+    <script>
+        // Game State Variables
+        let studentName = "";
+        let currentPuzzleIndex = 0;
+        let score = 0;
+        let gems = 0;
+        let islandStatus = [false, false, false, false, false];
+
+        // 5 Puzzles for Grade 3 (Chapter 5: Multiplication 2)
+        const puzzles = [
+            {
+                id: 1,
+                location: "الجسر الحجري الأول",
+                category: "حقائق الضرب في 6 و 7 و 8 و 9",
+                title: "أحجار الجسر القديم",
+                desc: "لعبور الجسر الحجري بأمان، يتطلب فتح الباب حساب عدد الألياف الذهبية. إذا كان الجسر يتكون من 7 مجموعات من الأحجار، وفي كل مجموعة 6 أحجار سحرية، فما ناتج ضرب 7 × 6؟",
+                type: "num_input",
+                num1: 7,
+                num2: 6,
+                correctAnswer: 42,
+                hint: "احسب حقيقة الضرب للعددين 7 و 6: (7 × 6 = 42). تذكر أن 6 × 6 = 36، وبإضافة 6 نحصل على 42."
+            },
+            {
+                id: 2,
+                location: "مغارة العوامل المفقودة",
+                category: "الخاصية التجميعية والعوامل المفقودة",
+                title: "صندوق العوامل السحرية",
+                desc: "وجد المستكشف صندوقاً مقفلاً بحاجة لإكمال جملة الضرب الآتية: ( 2 × 4 ) × 9 = 2 × ( ... × 9 ). ما هو العدد المفقود في الفراغ لتتساوى الكفتان؟",
+                type: "fill_blank",
+                expression: "( 2 × 4 ) × 9 = 2 × ( [ ؟ ] × 9 )",
+                options: ["2", "4", "9", "8"],
+                correctOption: "4",
+                hint: "الخاصية التجميعية للضرب تنص على أن تغيير تجميع الأعداد لا يغير ناتج الضرب. الأعداد هي 2 و 4 و 9، فالعدد المفقود هو 4."
+            },
+            {
+                id: 3,
+                location: "اللوحة الأثرية الغامضة",
+                category: "اكتشاف الخطأ والتصحيح في الضرب",
+                title: "تصحيح نقش اللوحة",
+                desc: "كتب أحد المستكشفين السابقين على اللوحة: ( 8 × 7 = 54 ). هل هذا الناتج صحيح؟ إذا كان خطأ، فاختر الجملة التصحيحية المناسبة لإشعال قنديل المغارة:",
+                type: "choice_correction",
+                options: [
+                    "العبارة خطأ، والناتج الصحيح هو 8 × 7 = 56",
+                    "العبارة صحيحة والناتج 54",
+                    "العبارة خطأ، والناتج الصحيح هو 8 × 7 = 48",
+                    "العبارة خطأ، والناتج الصحيح هو 8 × 7 = 64"
+                ],
+                correctOption: "العبارة خطأ، والناتج الصحيح هو 8 × 7 = 56",
+                hint: "راجع حقيقة الضرب للعدد 8: (8 × 7 = 56) وليس 54."
+            },
+            {
+                id: 4,
+                location: "وادي المسائل الحياتية",
+                category: "مسألة لفظية تطبيعية من خطوة أو خطوتين",
+                title: "أشجار جوز الهند السحرية",
+                desc: "في وادي الجزيرة 9 أشجار جوز هند، على كل شجرة 8 ثمار ذهبية. أخذ المستكشف منها 12 ثمرة لفتح البوابة. كم ثمرة بقيت على الأشجار؟",
+                type: "multi_step_choice",
+                options: [
+                    "العدد الكلي للثمار = 72، ويبقى 60 ثمرة",
+                    "العدد الكلي للثمار = 64، ويبقى 52 ثمرة",
+                    "العدد الكلي للثمار = 81، ويبقى 69 ثمرة",
+                    "العدد الكلي للثمار = 56، ويبقى 44 ثمرة"
+                ],
+                correctOption: "العدد الكلي للثمار = 72، ويبقى 60 ثمرة",
+                hint: "الخطوة 1: نجد العدد الإجمالي للثمار (9 × 8 = 72 ثمرة). الخطوة 2: نطرح ما أُخذ منها (72 - 12 = 60 ثمرة)."
+            },
+            {
+                id: 5,
+                location: "بوابة الكنز النهائية",
+                category: "حقائق الضرب في 10 و 11 و 12 واستنتاج النمط",
+                title: "مفتاح الكنز الذهبي",
+                desc: "لفتح الكنز النهائي، اختر حقيقة الضرب الصحيحة التي تمثل الناتج 108 وتتبع نمط الضرب في الأعداد المقررة:",
+                type: "choice_pattern",
+                options: [
+                    "9 × 12 = 108",
+                    "9 × 10 = 108",
+                    "8 × 11 = 108",
+                    "7 × 12 = 108"
+                ],
+                correctOption: "9 × 12 = 108",
+                hint: "تذكر حقائق الضرب للعدد 9 أو 12: 9 × 12 = 108 (أو 9 × 10 = 90، و 9 × 2 = 18، فمجموعهما 90 + 18 = 108)."
+            }
+        ];
+
+        function startAdventure(event) {
+            event.preventDefault();
+            const inputName = document.getElementById('student-name').value.trim();
+            if (!inputName) {
+                alert("الرجاء إدخال اسم الطالب الكامل للبدء.");
+                return;
+            }
+            studentName = inputName;
+            document.getElementById('display-student-name').textContent = studentName;
+            
+            // Switch screens
+            document.getElementById('screen-welcome').classList.add('hidden');
+            document.getElementById('screen-game').classList.remove('hidden');
+
+            renderIslandIndicators();
+            loadPuzzle(0);
+        }
+
+        function renderIslandIndicators() {
+            const container = document.getElementById('island-indicators');
+            container.innerHTML = '';
+            islandStatus.forEach((completed, index) => {
+                const icon = document.createElement('div');
+                icon.className = `w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold border transition ${
+                    completed 
+                    ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-md shadow-emerald-500/40' 
+                    : index === currentPuzzleIndex 
+                        ? 'bg-amber-500/30 text-amber-300 border-amber-400 emerald-pulse' 
+                        : 'bg-slate-800 text-slate-500 border-slate-700'
+                }`;
+                icon.innerHTML = completed ? `<i class="fa-solid fa-check"></i>` : `<i class="fa-solid fa-compass"></i>`;
+                container.appendChild(icon);
+            });
+        }
+
+        function loadPuzzle(index) {
+            currentPuzzleIndex = index;
+            renderIslandIndicators();
+            const p = puzzles[index];
+
+            // Update Explorer sprite position (0% to 80%)
+            const posPercent = (index / (puzzles.length - 1)) * 80;
+            document.getElementById('explorer-sprite').style.right = `${posPercent}%`;
+
+            document.getElementById('current-puzzle-num').textContent = p.id;
+            document.getElementById('puzzle-category').textContent = p.category;
+            document.getElementById('puzzle-title').textContent = p.title;
+            document.getElementById('puzzle-desc').textContent = p.desc;
+            document.getElementById('location-tag').textContent = `الموقع: ${p.location}`;
+
+            const contentArea = document.getElementById('puzzle-content');
+            contentArea.innerHTML = '';
+
+            if (p.type === 'num_input') {
+                const mathBox = document.createElement('div');
+                mathBox.className = 'bg-slate-900/90 border border-emerald-500/40 rounded-2xl p-6 text-center mb-6 shadow-inner';
+                mathBox.innerHTML = `
+                    <div class="text-3xl sm:text-4xl font-black text-amber-300 tracking-wider mb-2">
+                        ${p.num1} × ${p.num2} = ؟
+                    </div>
+                `;
+                contentArea.appendChild(mathBox);
+
+                const inputWrapper = document.createElement('div');
+                inputWrapper.className = 'max-w-xs mx-auto';
+                inputWrapper.innerHTML = `
+                    <input type="number" id="user-answer" placeholder="أدخل الناتج الرقمي..."
+                        class="w-full px-4 py-3.5 rounded-xl bg-slate-800 border-2 border-emerald-500/50 text-white text-center font-bold text-xl placeholder-slate-500 focus:outline-none focus:border-amber-400 transition shadow-inner">
+                `;
+                contentArea.appendChild(inputWrapper);
+
+            } else if (p.type === 'fill_blank') {
+                const exprBox = document.createElement('div');
+                exprBox.className = 'bg-slate-900/90 border border-emerald-500/40 rounded-2xl p-6 text-center mb-6 shadow-inner';
+                exprBox.innerHTML = `
+                    <div class="text-xl sm:text-2xl font-black text-emerald-300 tracking-wider dir-ltr">
+                        ${p.expression}
+                    </div>
+                `;
+                contentArea.appendChild(exprBox);
+
+                const optionsGrid = document.createElement('div');
+                optionsGrid.className = 'grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-lg mx-auto';
+                p.options.forEach((opt) => {
+                    optionsGrid.innerHTML += `
+                        <label class="bg-slate-800 border border-emerald-500/40 p-3.5 rounded-xl cursor-pointer hover:bg-emerald-950/50 flex items-center justify-center gap-2 transition">
+                            <input type="radio" name="puzzle-option" value="${opt}" class="w-5 h-5 accent-emerald-500">
+                            <span class="text-white font-bold text-lg">${opt}</span>
+                        </label>
+                    `;
+                });
+                contentArea.appendChild(optionsGrid);
+
+            } else if (p.type === 'choice_correction' || p.type === 'multi_step_choice' || p.type === 'choice_pattern') {
+                const optionsGrid = document.createElement('div');
+                optionsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto';
+                p.options.forEach((opt) => {
+                    optionsGrid.innerHTML += `
+                        <label class="bg-slate-800 border border-emerald-500/40 p-4 rounded-xl cursor-pointer hover:bg-emerald-950/50 flex items-center gap-3 transition">
+                            <input type="radio" name="puzzle-option" value="${opt}" class="w-5 h-5 accent-emerald-500">
+                            <span class="text-emerald-100 font-bold text-sm sm:text-base">${opt}</span>
+                        </label>
+                    `;
+                });
+                contentArea.appendChild(optionsGrid);
+            }
+
+            // Reset UI Feedback
+            document.getElementById('feedback-box').classList.add('hidden');
+            document.getElementById('submit-answer-btn').style.display = 'flex';
+            document.getElementById('next-puzzle-btn').style.display = 'none';
+        }
+
+        function checkAnswer() {
+            const p = puzzles[currentPuzzleIndex];
+            let isCorrect = false;
+
+            if (p.type === 'num_input') {
+                const inputElem = document.getElementById('user-answer');
+                if (!inputElem || inputElem.value === "") {
+                    showFeedback(false, "الرجاء إدخال الرقم قبل التحقق.");
+                    return;
+                }
+                if (parseInt(inputElem.value) === p.correctAnswer) {
+                    isCorrect = true;
+                }
+            } else if (p.type === 'fill_blank' || p.type === 'choice_correction' || p.type === 'multi_step_choice' || p.type === 'choice_pattern') {
+                const selected = document.querySelector('input[name="puzzle-option"]:checked');
+                if (!selected) {
+                    showFeedback(false, "الرجاء اختيار إحدى الخيارات أولاً.");
+                    return;
+                }
+                if (selected.value === p.correctOption) {
+                    isCorrect = true;
+                }
+            }
+
+            if (isCorrect) {
+                islandStatus[currentPuzzleIndex] = true;
+                score += 25;
+                gems += 1;
+                document.getElementById('score-count').textContent = score;
+                document.getElementById('gems-count').textContent = gems;
+
+                renderIslandIndicators();
+                showFeedback(true, `إجابة رائعة ومتقنة! فتحت هذا السر وحصلت على جوهرة 💎 و 25 نقطة.`);
+
+                document.getElementById('submit-answer-btn').style.display = 'none';
+
+                if (currentPuzzleIndex < puzzles.length - 1) {
+                    document.getElementById('next-puzzle-btn').style.display = 'flex';
+                } else {
+                    setTimeout(showVictoryScreen, 1500);
+                }
+            } else {
+                showFeedback(false, `إجابة تحتاج لمراجعة. تلميح المستكشف: ${p.hint}`);
+            }
+        }
+
+        function showFeedback(isSuccess, message) {
+            const box = document.getElementById('feedback-box');
+            box.classList.remove('hidden', 'bg-emerald-900/90', 'border-emerald-500/60', 'text-emerald-100', 'bg-rose-900/90', 'border-rose-500/60', 'text-rose-100');
+            
+            if (isSuccess) {
+                box.classList.add('bg-emerald-900/90', 'border', 'border-emerald-500/60', 'text-emerald-100');
+                box.innerHTML = `<i class="fa-solid fa-circle-check text-2xl text-amber-400"></i> <div>${message}</div>`;
+            } else {
+                box.classList.add('bg-rose-900/90', 'border', 'border-rose-500/60', 'text-rose-100');
+                box.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-2xl text-rose-400"></i> <div>${message}</div>`;
+            }
+        }
+
+        function nextPuzzle() {
+            if (currentPuzzleIndex < puzzles.length - 1) {
+                currentPuzzleIndex++;
+                loadPuzzle(currentPuzzleIndex);
+            }
+        }
+
+        function showVictoryScreen() {
+            document.getElementById('screen-game').classList.add('hidden');
+            document.getElementById('screen-victory').classList.remove('hidden');
+            document.getElementById('badge-student-name').textContent = studentName;
+            document.getElementById('cert-student-name').textContent = studentName;
+            
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('cert-date').textContent = `تاريخ الإنجاز: ${dateStr}`;
+        }
+
+        function openCertificateModal() {
+            document.getElementById('certificate-modal').classList.remove('hidden');
+            document.getElementById('certificate-modal').classList.add('flex');
+        }
+
+        function closeCertificateModal() {
+            document.getElementById('certificate-modal').classList.remove('flex');
+            document.getElementById('certificate-modal').classList.add('hidden');
+        }
+
+        function restartGame() {
+            currentPuzzleIndex = 0;
+            score = 0;
+            gems = 0;
+            islandStatus = [false, false, false, false, false];
+            document.getElementById('score-count').textContent = '0';
+            document.getElementById('gems-count').textContent = '0';
+            document.getElementById('screen-victory').classList.add('hidden');
+            document.getElementById('screen-welcome').classList.remove('hidden');
+            document.getElementById('student-name').value = '';
+        }
+    </script>
+</body>
+</html>
