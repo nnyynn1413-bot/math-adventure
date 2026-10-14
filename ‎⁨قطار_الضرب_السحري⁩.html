@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قطار الضرب السحري</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Cairo & Tajawal) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        tajawal: ['Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #064e3b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(52, 211, 153, 0.6);
+        }
+        .card-glass {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        @keyframes chug {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-4deg) rotate(-0.5deg); }
+            75% { transform: translateY(2deg) rotate(0.5deg); }
+        }
+        .animate-train {
+            animation: chug 1.2s ease-in-out infinite;
+        }
+        @keyframes pulse-emerald {
+            0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.8); }
+        }
+        .emerald-pulse {
+            animation: pulse-emerald 2s infinite;
+        }
+        @keyframes moveTrack {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 0; }
+        }
+        .rail-moving {
+            background: repeating-linear-gradient(90deg, #475569 0px, #475569 15px, #1e293b 15px, #1e293b 30px);
+            animation: moveTrack 1s linear infinite;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #certificate-modal, #certificate-modal * {
+                visibility: visible;
+            }
+            #certificate-modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-3 sm:p-6 select-none">
+
+    <!-- Header Section -->
+    <header class="w-full max-w-4xl mx-auto mb-4 bg-slate-900/80 border border-emerald-500/30 rounded-2xl p-3 px-6 shadow-xl flex flex-wrap justify-between items-center text-xs sm:text-sm text-emerald-200">
+        <div class="flex items-center gap-2 mb-1 sm:mb-0">
+            <span class="bg-emerald-500/20 px-3 py-1 rounded-full text-emerald-300 font-bold border border-emerald-500/40">برنامج الرياضيات عالمي الممتع</span>
+        </div>
+        <div class="flex gap-4 font-semibold">
+            <div><i class="fa-solid fa-chalkboard-user ml-1.5 text-emerald-400"></i>معلمة المادة: <span class="text-white">نهلة يحيى القاضي</span></div>
+            <div><i class="fa-solid fa-school ml-1.5 text-emerald-400"></i>مديرة المدرسة: <span class="text-white">عبير حمود فرحان</span></div>
+        </div>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto flex-grow flex flex-col items-center justify-center">
+
+        <!-- Welcome Screen -->
+        <div id="screen-welcome" class="w-full card-glass rounded-3xl p-6 sm:p-10 shadow-2xl text-center flex flex-col items-center border border-emerald-500/30">
+            <div class="w-24 h-24 sm:w-32 sm:h-32 bg-emerald-500/10 rounded-full flex items-center justify-center border-2 border-emerald-400 mb-6 emerald-pulse animate-train">
+                <i class="fa-solid fa-train-tram text-5xl sm:text-6xl text-emerald-400"></i>
+            </div>
+            
+            <h1 class="text-3xl sm:text-5xl font-black text-emerald-300 mb-3 text-glow">قطار الضرب السحري</h1>
+            <p class="text-slate-300 text-sm sm:text-lg max-w-xl mb-8 leading-relaxed">
+                مرحباً بك أيها البطل في قطار الضرب السحري! انطلق معنا في رحلة عبر المحطات الملونة، وافتح الطريق أمام القطار بحل ألغاز الفصل الرابع (الضرب 1). هل أنت مستعد للإنطلاق لجمع النجوم وشارة التميز؟
+            </p>
+
+            <form id="login-form" onsubmit="startAdventure(event)" class="w-full max-w-md flex flex-col gap-4">
+                <div class="text-right">
+                    <label for="student-name" class="block text-sm font-bold text-emerald-200 mb-2">
+                        <i class="fa-solid fa-user-graduate ml-2"></i>اسم الطالب الكامل (إلزامي):
+                    </label>
+                    <input type="text" id="student-name" required placeholder="أدخل اسمك الثلاثي هنا..."
+                        class="w-full px-4 py-3.5 rounded-xl bg-slate-800/90 border-2 border-emerald-500/40 text-white placeholder-slate-400 focus:outline-none focus:border-emerald-400 text-lg transition shadow-inner">
+                </div>
+                <button type="submit" 
+                    class="mt-2 w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-black text-xl rounded-xl shadow-lg shadow-emerald-500/30 transform active:scale-95 transition flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-train text-2xl"></i> صعود القطار وابدأ المغامرة
+                </button>
+            </form>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="screen-game" class="w-full hidden flex flex-col gap-6">
+            <!-- Game Status & Progress Bar -->
+            <div class="card-glass rounded-2xl p-4 flex flex-wrap justify-between items-center gap-4 border border-emerald-500/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 text-xl font-bold">
+                        <i class="fa-solid fa-hat-wizard"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400">بطل الرياضيات</div>
+                        <div id="display-student-name" class="font-bold text-emerald-200 text-base sm:text-lg">اسم الطالب</div>
+                    </div>
+                </div>
+
+                <!-- Stars and Score -->
+                <div class="flex items-center gap-4">
+                    <div class="bg-slate-800/90 border border-amber-500/40 px-3 py-1.5 rounded-xl flex items-center gap-2">
+                        <i class="fa-solid fa-star text-amber-400 text-lg"></i>
+                        <span id="stars-count" class="font-bold text-amber-300 text-lg">0</span>
+                    </div>
+                    <div class="bg-slate-800/90 border border-emerald-500/40 px-3 py-1.5 rounded-xl flex items-center gap-2">
+                        <i class="fa-solid fa-trophy text-emerald-400 text-lg"></i>
+                        <span id="score-count" class="font-bold text-emerald-300 text-lg">0</span>
+                    </div>
+                </div>
+
+                <!-- Stations Progress -->
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-center">
+                    <span class="text-xs text-slate-300 ml-1">المحطات:</span>
+                    <div id="stations-indicators" class="flex gap-2">
+                        <!-- Dynamic indicators -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Animated Train Track Visualizer -->
+            <div class="card-glass rounded-2xl p-4 border border-emerald-500/30 overflow-hidden relative">
+                <div class="text-xs text-slate-400 mb-2 flex justify-between items-center">
+                    <span><i class="fa-solid fa-map-location-dot ml-1 text-emerald-400"></i>مسار القطار السحري</span>
+                    <span id="station-name-tag" class="text-emerald-300 font-bold">المحطة الأولى: محطة الجمع المتكرر</span>
+                </div>
+                <!-- Track Line -->
+                <div class="h-10 w-full rounded-xl bg-slate-900 border border-slate-700 relative flex items-center px-4 overflow-hidden">
+                    <div class="absolute inset-0 h-1 top-1/2 -translate-y-1/2 bg-amber-500/30 w-full"></div>
+                    <div id="train-sprite" class="relative z-10 transition-all duration-700 ease-in-out flex items-center gap-2" style="right: 0%;">
+                        <i class="fa-solid fa-train-subway text-2xl text-amber-400 animate-train"></i>
+                        <span class="text-xs bg-emerald-500 text-slate-950 font-black px-2 py-0.5 rounded-md">القطار</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Puzzle Card -->
+            <div class="card-glass rounded-3xl p-6 sm:p-10 shadow-2xl border border-emerald-500/30 relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-emerald-500/10 px-6 py-2 rounded-bl-2xl border-l border-b border-emerald-500/30 text-emerald-300 font-bold text-sm">
+                    المحطة <span id="current-puzzle-num">1</span> من 5
+                </div>
+
+                <div class="mt-4 mb-6">
+                    <span id="puzzle-category" class="bg-indigo-500/20 border border-indigo-400/40 text-indigo-300 px-3 py-1 rounded-lg text-xs font-bold">
+                        تصنيف المهارة
+                    </span>
+                    <h2 id="puzzle-title" class="text-xl sm:text-2xl font-black text-emerald-300 mt-3">عنوان اللغز</h2>
+                    <p id="puzzle-desc" class="text-slate-200 text-sm sm:text-base mt-2 leading-relaxed">نص وصف اللغز والسؤال...</p>
+                </div>
+
+                <!-- Interactive Question Area -->
+                <div id="puzzle-content" class="my-6">
+                    <!-- Dynamic question views -->
+                </div>
+
+                <!-- Feedback Message Box -->
+                <div id="feedback-box" class="hidden rounded-2xl p-4 mb-6 text-sm sm:text-base font-semibold flex items-center gap-3 transition-all">
+                    <!-- Dynamic Feedback -->
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-end gap-3">
+                    <button id="submit-answer-btn" onclick="checkAnswer()"
+                        class="px-8 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-black text-lg rounded-xl shadow-lg shadow-emerald-500/20 transform active:scale-95 transition flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-xl"></i> تحقق من الإجابة
+                    </button>
+                    <button id="next-puzzle-btn" onclick="nextPuzzle()" style="display: none;"
+                        class="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-black text-lg rounded-xl shadow-lg shadow-amber-500/30 transform active:scale-95 transition flex items-center gap-2">
+                        <i class="fa-solid fa-forward text-xl"></i> الانطلاق للمحطة التالية
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Victory Screen -->
+        <div id="screen-victory" class="w-full hidden card-glass rounded-3xl p-6 sm:p-10 shadow-2xl text-center flex flex-col items-center border border-emerald-500/30">
+            <div class="w-28 h-28 sm:w-36 sm:h-36 bg-amber-500/20 rounded-full flex items-center justify-center border-4 border-amber-400 mb-6 emerald-pulse animate-train">
+                <i class="fa-solid fa-gift text-6xl sm:text-7xl text-amber-300"></i>
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl font-black text-amber-300 mb-3 text-glow">وصل القطار إلى الكنز النهائي!</h1>
+            <p id="victory-message" class="text-slate-200 text-base sm:text-lg max-w-xl mb-6 leading-relaxed">
+                مبارك يا بطل! لقد واصلت الرحلة بنجاح واجتازت جميع محطات قطار الضرب السحري وأثبت كفاءتك في مهارات الضرب!
+            </p>
+
+            <!-- Badge Display Card -->
+            <div class="bg-gradient-to-br from-emerald-500/20 to-teal-600/30 border-2 border-emerald-400/60 rounded-2xl p-6 mb-8 max-w-sm w-full shadow-2xl relative overflow-hidden">
+                <div class="absolute -top-6 -right-6 w-24 h-24 bg-emerald-400/10 rounded-full blur-xl"></div>
+                <div class="text-emerald-300 font-bold text-sm tracking-widest mb-1">شارة تقديرية رسمية</div>
+                <div class="text-3xl font-black text-white mb-2">⭐ بطل الضرب ⭐</div>
+                <div id="badge-student-name" class="text-emerald-200 font-bold text-lg">اسم الطالب</div>
+                <div class="text-xs text-slate-300 mt-2">منهج الرياضيات عالمي الممتع - الفصل الرابع</div>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 w-full max-w-md">
+                <button onclick="openCertificateModal()" 
+                    class="flex-1 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-black text-lg rounded-xl shadow-lg shadow-emerald-500/30 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-certificate text-xl"></i> عرض وطباعة الشهادة
+                </button>
+                <button onclick="restartGame()" 
+                    class="px-6 py-4 bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/40 font-bold text-lg rounded-xl transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> رحلة جديدة
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Certificate Modal -->
+    <div id="certificate-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 z-50">
+        <div class="bg-white text-slate-900 rounded-3xl p-6 sm:p-10 max-w-3xl w-full shadow-2xl border-8 border-emerald-500 relative overflow-hidden flex flex-col justify-between">
+            <!-- Corner decoration -->
+            <div class="absolute top-3 left-3 text-emerald-600 text-xl"><i class="fa-solid fa-star"></i></div>
+            <div class="absolute top-3 right-3 text-emerald-600 text-xl"><i class="fa-solid fa-star"></i></div>
+            <div class="absolute bottom-3 left-3 text-emerald-600 text-xl"><i class="fa-solid fa-star"></i></div>
+            <div class="absolute bottom-3 right-3 text-emerald-600 text-xl"><i class="fa-solid fa-star"></i></div>
+
+            <!-- Header of Certificate -->
+            <div class="text-center mb-6">
+                <div class="text-emerald-800 font-black text-sm tracking-wider mb-1">المملكة العربية السعودية • برنامج الرياضيات عالمي الممتع</div>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-wide mt-2">شهادة بطل الضرب</h2>
+                <div class="w-32 h-1 bg-emerald-500 mx-auto mt-2 rounded-full"></div>
+            </div>
+
+            <!-- Body of Certificate -->
+            <div class="text-center my-6 space-y-4">
+                <p class="text-slate-600 text-base">تمنح هذه الشهادة بكل فخر واعتزاز إلى المبدع/ة:</p>
+                <div id="cert-student-name" class="text-2xl sm:text-4xl font-black text-emerald-800 border-b-2 border-dashed border-emerald-300 pb-2 inline-block px-8">
+                    اسم الطالب
+                </div>
+                <p class="text-slate-700 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+                    لاجتيازه رحلة «قطار الضرب السحري» بمهارة واقتدار، وإتقانه مفاهيم الجمع المتكرر، والمجموعات المتساوية، والمصفوفات، وحقائق الضرب الأساسية ضمن منهج الفصل الدراسي الرابع للصف الثالث الابتدائي.
+                </p>
+                <div class="text-xs text-slate-500 font-semibold" id="cert-date">تاريخ الإنجاز: --/--/----</div>
+            </div>
+
+            <!-- Footer signatures of Certificate -->
+            <div class="flex justify-between items-end mt-8 pt-6 border-t border-slate-200 text-xs sm:text-sm font-bold">
+                <div class="text-center">
+                    <div class="text-slate-500 mb-1">معلمة المادة</div>
+                    <div class="text-slate-900 font-black">نهلة يحيى القاضي</div>
+                </div>
+                <div class="text-center no-print">
+                    <button onclick="window.print()" class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black rounded-xl shadow transition flex items-center gap-2">
+                        <i class="fa-solid fa-print"></i> طباعة / حفظ PDF
+                    </button>
+                    <button onclick="closeCertificateModal()" class="mt-2 text-slate-500 hover:text-slate-800 text-xs underline">
+                        إغلاق النافذة
+                    </button>
+                </div>
+                <div class="text-center">
+                    <div class="text-slate-500 mb-1">مديرة المدرسة</div>
+                    <div class="text-slate-900 font-black">عبير حمود فرحان</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="w-full text-center mt-6 text-xs text-slate-400">
+        جميع الحقوق محفوظة © برنامج الرياضيات عالمي الممتع - الصف الثالث الابتدائي
+    </footer>
+
+    <script>
+        // Game State Variables
+        let studentName = "";
+        let currentPuzzleIndex = 0;
+        let score = 0;
+        let stars = 0;
+        let stationStatus = [false, false, false, false, false];
+
+        // 5 Puzzles for Grade 3 (Chapter 4: Multiplication 1)
+        const puzzles = [
+            {
+                id: 1,
+                stationName: "المحطة الأولى: محطة الجمع المتكرر",
+                category: "الربط بين الجمع المتكرر والضرب",
+                title: "عربات الفواكه السحرية",
+                desc: "يوجد 4 عربات في القطار، في كل عربة 3 تفاحات. حوّل عبارة الجمع المتكرر (3 + 3 + 3 + 3) إلى جملة ضرب مع النتيجة الصحيحة:",
+                type: "groups_visual",
+                groupsCount: 4,
+                itemsPerGroup: 3,
+                correctGroupExpr: "4 × 3 = 12",
+                options: ["4 × 3 = 12", "4 + 3 = 7", "3 × 3 = 9", "4 × 4 = 16"],
+                hint: "لاحظ أن لدينا 4 مجموعات (عربات) وفي كل مجموعة 3 عناصر. عدد المجموعات × عدد العناصر في كل مجموعة = 12."
+            },
+            {
+                id: 2,
+                stationName: "المحطة الثانية: محطة الشبكات والمصفوفات",
+                category: "تمثيل الضرب بالشبكات",
+                title: "شبكة الأضواء الملونة",
+                desc: "أمام القطار شبكة أضواء ملونة تتكون من 3 صفوف، وفي كل صف 5 مصابيح. ما جملة الضرب المناسبة لإيجاد العدد الكلي للمصابيح؟",
+                type: "grid_visual",
+                rows: 3,
+                cols: 5,
+                correctAnswer: 15,
+                hint: "العدد الكلي للمصابيح = عدد الصفوف (3) مضروباً في عدد الأعمدة (5). 3 × 5 = 15."
+            },
+            {
+                id: 3,
+                stationName: "المحطة الثالثة: محطة مضاعفات العدد 2 والـ 5",
+                category: "حقائق الضرب للعددين 2 و 5",
+                title: "عجلات القطار الذهبية",
+                desc: "توقفت القاطرة لتفقد العجلات! إذا كان لدى القطار 5 عربات، ولدى كل عربة عجلتان (2) من كل جانب. كم عدد العجلات الإجمالي في ذلك الجانب؟",
+                type: "num_input",
+                num1: 5,
+                num2: 2,
+                correctAnswer: 10,
+                hint: "احسب 5 مجموعات في كل منها 2: 5 × 2 = 10."
+            },
+            {
+                id: 4,
+                stationName: "المحطة الرابعة: محطة المسائل اللفظية التطبيقية",
+                category: "حل المسائل باستعمال الضرب",
+                title: "علب الحلوى السحرية",
+                desc: "اشترى بطل الرياضيات 6 علب من الحلوى السحرية، وفي كل علبة 5 قطع. ما عدد قطع الحلوى التي حصل عليها البطل؟",
+                type: "choice_and_calc",
+                options: ["6 × 5 = 30", "6 + 5 = 11", "6 - 5 = 1", "5 × 5 = 25"],
+                correctOption: "6 × 5 = 30",
+                correctAnswer: 30,
+                hint: "لمعرفة العدد الإجمالي لقطع الحلوى في المجموعات المتساوية نضرب عدد العلب في عدد القطع: 6 × 5 = 30."
+            },
+            {
+                id: 5,
+                stationName: "المحطة الخامسة والأخيرة: محطة الضرب في 10 والاكتشاف",
+                category: "الضرب في 10 واكتشاف النمط",
+                title: "مفتاح البوابة النهائية",
+                desc: "لفتح بوابة الكنز النهائية للقطار، أوجد قيمة النمط الآتي: ( 1 × 10 = 10 )، ( 2 × 10 = 20 )، ( 3 × 10 = 30 ). كم يساوي 4 × 10؟",
+                type: "num_input",
+                num1: 4,
+                num2: 10,
+                correctAnswer: 40,
+                hint: "عند الضرب في العدد 10 نضع صَفْراً على يمين الرقم: 4 × 10 = 40."
+            }
+        ];
+
+        function startAdventure(event) {
+            event.preventDefault();
+            const inputName = document.getElementById('student-name').value.trim();
+            if (!inputName) {
+                alert("الرجاء إدخال اسم الطالب الكامل للبدء.");
+                return;
+            }
+            studentName = inputName;
+            document.getElementById('display-student-name').textContent = studentName;
+            
+            // Switch screens
+            document.getElementById('screen-welcome').classList.add('hidden');
+            document.getElementById('screen-game').classList.remove('hidden');
+
+            renderStationsIndicators();
+            loadPuzzle(0);
+        }
+
+        function renderStationsIndicators() {
+            const container = document.getElementById('stations-indicators');
+            container.innerHTML = '';
+            stationStatus.forEach((completed, index) => {
+                const icon = document.createElement('div');
+                icon.className = `w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold border transition ${
+                    completed 
+                    ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-md shadow-emerald-500/40' 
+                    : index === currentPuzzleIndex 
+                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400 emerald-pulse' 
+                        : 'bg-slate-800 text-slate-500 border-slate-700'
+                }`;
+                icon.innerHTML = completed ? `<i class="fa-solid fa-check"></i>` : `<i class="fa-solid fa-train"></i>`;
+                container.appendChild(icon);
+            });
+        }
+
+        function loadPuzzle(index) {
+            currentPuzzleIndex = index;
+            renderStationsIndicators();
+            const p = puzzles[index];
+
+            // Update Train position on track (0% to 80%)
+            const posPercent = (index / (puzzles.length - 1)) * 80;
+            document.getElementById('train-sprite').style.right = `${posPercent}%`;
+
+            document.getElementById('current-puzzle-num').textContent = p.id;
+            document.getElementById('puzzle-category').textContent = p.category;
+            document.getElementById('puzzle-title').textContent = p.title;
+            document.getElementById('puzzle-desc').textContent = p.desc;
+            document.getElementById('station-name-tag').textContent = p.stationName;
+
+            const contentArea = document.getElementById('puzzle-content');
+            contentArea.innerHTML = '';
+
+            if (p.type === 'groups_visual') {
+                // Visual groups of fruits/elements
+                const visualBox = document.createElement('div');
+                visualBox.className = 'bg-slate-900/90 border border-emerald-500/30 rounded-2xl p-4 sm:p-6 mb-6 text-center';
+                
+                let groupsHTML = '<div class="flex flex-wrap justify-center gap-4 mb-4">';
+                for (let g = 0; g < p.groupsCount; g++) {
+                    groupsHTML += `
+                        <div class="bg-slate-800 border border-emerald-400/30 p-3 rounded-xl flex flex-col items-center">
+                            <span class="text-xs text-emerald-300 mb-1 font-bold">عربة ${g + 1}</span>
+                            <div class="flex gap-1 text-2xl text-red-400">
+                                <i class="fa-solid fa-apple-whole"></i>
+                                <i class="fa-solid fa-apple-whole"></i>
+                                <i class="fa-solid fa-apple-whole"></i>
+                            </div>
+                        </div>
+                    `;
+                }
+                groupsHTML += '</div>';
+                visualBox.innerHTML = groupsHTML;
+                contentArea.appendChild(visualBox);
+
+                // Multiple options selector
+                const optionsGrid = document.createElement('div');
+                optionsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto';
+                p.options.forEach((opt) => {
+                    optionsGrid.innerHTML += `
+                        <label class="bg-slate-800 border border-emerald-500/40 p-3.5 rounded-xl cursor-pointer hover:bg-emerald-950/40 flex items-center gap-3 transition">
+                            <input type="radio" name="puzzle-option" value="${opt}" class="w-5 h-5 accent-emerald-500">
+                            <span class="text-white font-bold text-lg">${opt}</span>
+                        </label>
+                    `;
+                });
+                contentArea.appendChild(optionsGrid);
+
+            } else if (p.type === 'grid_visual') {
+                // Visual grid matrix
+                const gridBox = document.createElement('div');
+                gridBox.className = 'bg-slate-900/90 border border-emerald-500/30 rounded-2xl p-6 mb-6 text-center flex flex-col items-center';
+                
+                let gridHTML = `<div class="grid grid-cols-5 gap-2 mb-3 bg-slate-800 p-4 rounded-xl border border-emerald-500/30">`;
+                for (let r = 0; r < p.rows * p.cols; r++) {
+                    gridHTML += `<div class="w-8 h-8 rounded-full bg-amber-400/20 border border-amber-400 flex items-center justify-center text-amber-300"><i class="fa-solid fa-lightbulb text-sm"></i></div>`;
+                }
+                gridHTML += `</div>`;
+                gridHTML += `<div class="text-slate-300 text-sm font-bold">3 صفوف × 5 مصابيح</div>`;
+                gridBox.innerHTML = gridHTML;
+                contentArea.appendChild(gridBox);
+
+                const inputWrapper = document.createElement('div');
+                inputWrapper.className = 'max-w-xs mx-auto';
+                inputWrapper.innerHTML = `
+                    <input type="number" id="user-answer" placeholder="أدخل إجمالي المصابيح..."
+                        class="w-full px-4 py-3.5 rounded-xl bg-slate-800 border-2 border-emerald-500/50 text-white text-center font-bold text-xl placeholder-slate-500 focus:outline-none focus:border-emerald-400 transition shadow-inner">
+                `;
+                contentArea.appendChild(inputWrapper);
+
+            } else if (p.type === 'num_input') {
+                const mathBox = document.createElement('div');
+                mathBox.className = 'bg-slate-900/90 border border-emerald-500/30 rounded-2xl p-6 text-center mb-6 shadow-inner';
+                mathBox.innerHTML = `
+                    <div class="text-3xl sm:text-4xl font-black text-emerald-300 tracking-wider mb-2">
+                        ${p.num1} × ${p.num2} = ?
+                    </div>
+                `;
+                contentArea.appendChild(mathBox);
+
+                const inputWrapper = document.createElement('div');
+                inputWrapper.className = 'max-w-xs mx-auto';
+                inputWrapper.innerHTML = `
+                    <input type="number" id="user-answer" placeholder="أدخل ناتج الضرب هنا..."
+                        class="w-full px-4 py-3.5 rounded-xl bg-slate-800 border-2 border-emerald-500/50 text-white text-center font-bold text-xl placeholder-slate-500 focus:outline-none focus:border-emerald-400 transition shadow-inner">
+                `;
+                contentArea.appendChild(inputWrapper);
+
+            } else if (p.type === 'choice_and_calc') {
+                const optionsGrid = document.createElement('div');
+                optionsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto';
+                p.options.forEach((opt) => {
+                    optionsGrid.innerHTML += `
+                        <label class="bg-slate-800 border border-emerald-500/40 p-3.5 rounded-xl cursor-pointer hover:bg-emerald-950/40 flex items-center gap-3 transition">
+                            <input type="radio" name="puzzle-option" value="${opt}" class="w-5 h-5 accent-emerald-500">
+                            <span class="text-white font-bold text-lg">${opt}</span>
+                        </label>
+                    `;
+                });
+                contentArea.appendChild(optionsGrid);
+            }
+
+            // Reset UI feedback
+            document.getElementById('feedback-box').classList.add('hidden');
+            document.getElementById('submit-answer-btn').style.display = 'flex';
+            document.getElementById('next-puzzle-btn').style.display = 'none';
+        }
+
+        function checkAnswer() {
+            const p = puzzles[currentPuzzleIndex];
+            let isCorrect = false;
+
+            if (p.type === 'groups_visual') {
+                const selected = document.querySelector('input[name="puzzle-option"]:checked');
+                if (!selected) {
+                    showFeedback(false, "الرجاء اختيار الجملة المناسبة أولاً.");
+                    return;
+                }
+                if (selected.value === p.correctGroupExpr) {
+                    isCorrect = true;
+                }
+            } else if (p.type === 'grid_visual' || p.type === 'num_input') {
+                const inputElem = document.getElementById('user-answer');
+                if (!inputElem || inputElem.value === "") {
+                    showFeedback(false, "الرجاء كتابة الناتج أولاً.");
+                    return;
+                }
+                if (parseInt(inputElem.value) === p.correctAnswer) {
+                    isCorrect = true;
+                }
+            } else if (p.type === 'choice_and_calc') {
+                const selected = document.querySelector('input[name="puzzle-option"]:checked');
+                if (!selected) {
+                    showFeedback(false, "الرجاء اختيار الجملة المناسبة أولاً.");
+                    return;
+                }
+                if (selected.value === p.correctOption) {
+                    isCorrect = true;
+                }
+            }
+
+            if (isCorrect) {
+                stationStatus[currentPuzzleIndex] = true;
+                score += 20;
+                stars += 1;
+                document.getElementById('score-count').textContent = score;
+                document.getElementById('stars-count').textContent = stars;
+
+                renderStationsIndicators();
+                showFeedback(true, `إجابة رائعة وصحيحة يا بطل! حصلت على نجمة ⭐️ و20 نقطة. انطلق للمحطة التالية.`);
+
+                document.getElementById('submit-answer-btn').style.display = 'none';
+
+                if (currentPuzzleIndex < puzzles.length - 1) {
+                    document.getElementById('next-puzzle-btn').style.display = 'flex';
+                } else {
+                    setTimeout(showVictoryScreen, 1500);
+                }
+            } else {
+                showFeedback(false, `إجابة تحتاج إلى مراجعة. حاول مجدداً! تلميح: ${p.hint}`);
+            }
+        }
+
+        function showFeedback(isSuccess, message) {
+            const box = document.getElementById('feedback-box');
+            box.classList.remove('hidden', 'bg-emerald-900/80', 'border-emerald-500/50', 'text-emerald-200', 'bg-rose-900/80', 'border-rose-500/50', 'text-rose-200');
+            
+            if (isSuccess) {
+                box.classList.add('bg-emerald-900/80', 'border', 'border-emerald-500/50', 'text-emerald-200');
+                box.innerHTML = `<i class="fa-solid fa-circle-check text-2xl text-emerald-400"></i> <div>${message}</div>`;
+            } else {
+                box.classList.add('bg-rose-900/80', 'border', 'border-rose-500/50', 'text-rose-200');
+                box.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-2xl text-rose-400"></i> <div>${message}</div>`;
+            }
+        }
+
+        function nextPuzzle() {
+            if (currentPuzzleIndex < puzzles.length - 1) {
+                currentPuzzleIndex++;
+                loadPuzzle(currentPuzzleIndex);
+            }
+        }
+
+        function showVictoryScreen() {
+            document.getElementById('screen-game').classList.add('hidden');
+            document.getElementById('screen-victory').classList.remove('hidden');
+            document.getElementById('badge-student-name').textContent = studentName;
+            document.getElementById('cert-student-name').textContent = studentName;
+            
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('cert-date').textContent = `تاريخ الإنجاز: ${dateStr}`;
+        }
+
+        function openCertificateModal() {
+            document.getElementById('certificate-modal').classList.remove('hidden');
+            document.getElementById('certificate-modal').classList.add('flex');
+        }
+
+        function closeCertificateModal() {
+            document.getElementById('certificate-modal').classList.remove('flex');
+            document.getElementById('certificate-modal').classList.add('hidden');
+        }
+
+        function restartGame() {
+            currentPuzzleIndex = 0;
+            score = 0;
+            stars = 0;
+            stationStatus = [false, false, false, false, false];
+            document.getElementById('score-count').textContent = '0';
+            document.getElementById('stars-count').textContent = '0';
+            document.getElementById('screen-victory').classList.add('hidden');
+            document.getElementById('screen-welcome').classList.remove('hidden');
+            document.getElementById('student-name').value = '';
+        }
+    </script>
+</body>
+</html>
