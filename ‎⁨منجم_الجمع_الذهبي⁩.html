@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منجم الجمع الذهبي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #31103f 50%, #451a03 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+        .mine-bg {
+            background-image: radial-gradient(circle at center, rgba(234, 179, 8, 0.15) 0%, transparent 70%);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes pulse-gold {
+            0%, 100% { box-shadow: 0 0 15px rgba(234, 179, 8, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(234, 179, 8, 0.9); }
+        }
+        .gold-glow {
+            animation: pulse-gold 2s infinite;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #certificate-modal, #certificate-modal * {
+                visibility: visible;
+            }
+            #certificate-modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="mine-bg flex flex-col min-h-screen selection:bg-amber-500 selection:text-white">
+
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-amber-500/30 py-3 px-4 shadow-lg sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center text-xs sm:text-sm font-semibold text-amber-200 gap-1">
+            <div class="flex items-center gap-2">
+                <span class="bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full font-bold">برنامج</span>
+                <span>الرياضيات عالمي الممتع</span>
+            </div>
+            <div class="flex gap-4">
+                <span>معلمة المادة: <strong class="text-white">نهلة يحيى القاضي</strong></span>
+                <span>مديرة المدرسة: <strong class="text-white">عبير حمود فرحان</strong></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-4 sm:p-6">
+        <div class="w-full max-w-3xl bg-slate-900/90 border-2 border-amber-500/40 rounded-3xl shadow-2xl overflow-hidden backdrop-blur-xl relative">
+
+            <!-- SCREEN 1: START SCREEN -->
+            <section id="start-screen" class="p-6 sm:p-10 text-center flex flex-col items-center">
+                <div class="mb-6 floating">
+                    <div class="w-28 h-28 bg-gradient-to-br from-amber-400 to-yellow-600 rounded-3xl flex items-center justify-center shadow-2xl mx-auto text-6xl border-4 border-amber-200">
+                        ⛏️✨
+                    </div>
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-black text-amber-400 mb-3 drop-shadow-md">
+                    منجم الجمع الذهبي
+                </h1>
+                <p class="text-slate-300 text-sm sm:text-base max-w-lg mb-8 leading-relaxed">
+                    مرحباً بك أيها المستكشف البطل في مغامرة شيقة لجمع الذهب وفتح صناديق الكنوز عبر حل مسائل وحيل الجمع للصف الثالث الابتدائي!
+                </p>
+
+                <form id="start-form" class="w-full max-w-md bg-slate-800/80 p-6 rounded-2xl border border-amber-500/30 shadow-inner flex flex-col gap-4">
+                    <div class="text-right">
+                        <label for="student-name" class="block text-sm font-bold text-amber-300 mb-2">اسم الطالب الكامل:</label>
+                        <input type="text" id="student-name" required placeholder="اكتب اسمك الثلاثي هنا..." 
+                            class="w-full px-4 py-3 bg-slate-900 border-2 border-slate-700 focus:border-amber-500 rounded-xl text-white outline-none transition placeholder-slate-500 text-base">
+                    </div>
+                    <button type="submit" 
+                        class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black rounded-xl shadow-lg transition transform hover:-translate-y-0.5 active:translate-y-0 text-lg flex items-center justify-center gap-2">
+                        <span>ابدأ المغامرة</span>
+                        <span>🚀</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- SCREEN 2: GAME SCREEN -->
+            <section id="game-screen" class="hidden p-6 sm:p-8 flex flex-col">
+                <!-- Top Status Bar -->
+                <div class="flex justify-between items-center bg-slate-800/90 px-4 py-3 rounded-2xl border border-amber-500/30 mb-6 shadow">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">🧑‍🚀</span>
+                        <span id="display-student-name" class="font-bold text-amber-300 text-sm sm:text-base">اسم البطل</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-sm font-bold">
+                        <div class="flex items-center gap-1 bg-slate-900 px-3 py-1.5 rounded-xl border border-amber-500/20">
+                            <span>🪙</span>
+                            <span id="score-counter" class="text-amber-400">0</span>
+                            <span class="text-slate-400">/ 5</span>
+                        </div>
+                        <div class="flex items-center gap-1 bg-slate-900 px-3 py-1.5 rounded-xl border border-amber-500/20">
+                            <span>⭐</span>
+                            <span id="stars-counter" class="text-yellow-400">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mine Cart Progress Visual -->
+                <div class="mb-6 bg-slate-950/60 p-4 rounded-2xl border border-slate-800 flex flex-col items-center">
+                    <div class="text-xs font-bold text-slate-400 mb-2">تقدم عربة التعدين وصناديق الكنوز:</div>
+                    <div class="flex justify-between w-full max-w-md relative px-2">
+                        <!-- Connecting Line -->
+                        <div class="absolute top-1/2 left-6 right-6 h-1 bg-slate-800 -translate-y-1/2 z-0"></div>
+                        <div id="progress-line" class="absolute top-1/2 left-6 h-1 bg-amber-500 -translate-y-1/2 z-0 transition-all duration-500" style="width: 0%;"></div>
+                        
+                        <!-- 5 Chest Nodes -->
+                        <div class="z-10 flex flex-col items-center node-step" data-step="1">
+                            <div class="w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg shadow transition-all" id="node-1">🔒</div>
+                            <span class="text-[10px] mt-1 text-slate-400">لغز 1</span>
+                        </div>
+                        <div class="z-10 flex flex-col items-center node-step" data-step="2">
+                            <div class="w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg shadow transition-all" id="node-2">🔒</div>
+                            <span class="text-[10px] mt-1 text-slate-400">لغز 2</span>
+                        </div>
+                        <div class="z-10 flex flex-col items-center node-step" data-step="3">
+                            <div class="w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg shadow transition-all" id="node-3">🔒</div>
+                            <span class="text-[10px] mt-1 text-slate-400">لغز 3</span>
+                        </div>
+                        <div class="z-10 flex flex-col items-center node-step" data-step="4">
+                            <div class="w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg shadow transition-all" id="node-4">🔒</div>
+                            <span class="text-[10px] mt-1 text-slate-400">لغز 4</span>
+                        </div>
+                        <div class="z-10 flex flex-col items-center node-step" data-step="5">
+                            <div class="w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg shadow transition-all" id="node-5">👑</div>
+                            <span class="text-[10px] mt-1 text-amber-400 font-bold">الكنز النهائي</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Puzzle Box -->
+                <div id="puzzle-container" class="bg-slate-800/90 border-2 border-amber-500/30 p-6 rounded-2xl shadow-xl flex flex-col gap-4">
+                    <div class="flex justify-between items-center">
+                        <span id="puzzle-category" class="bg-amber-500/20 text-amber-300 text-xs font-bold px-3 py-1 rounded-full border border-amber-500/30">تصنيف اللغز</span>
+                        <span id="puzzle-number" class="text-slate-400 text-xs font-bold">اللغز 1 من 5</span>
+                    </div>
+
+                    <h2 id="puzzle-question" class="text-lg sm:text-xl font-bold text-white leading-relaxed">
+                        نص السؤال سيظهر هنا...
+                    </h2>
+
+                    <!-- Options Grid or Numerical Input -->
+                    <div id="answers-area" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                        <!-- Dynamically populated choices or input field -->
+                    </div>
+
+                    <!-- Feedback message area -->
+                    <div id="feedback-area" class="hidden p-4 rounded-xl text-sm font-semibold transition-all"></div>
+
+                    <!-- Next Button (hidden initially) -->
+                    <button id="next-puzzle-btn" onclick="nextPuzzle()" 
+                        class="hidden w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow transition mt-2">
+                        المتابعة إلى اللغز التالي ⬅️
+                    </button>
+                </div>
+            </section>
+
+            <!-- SCREEN 3: COMPLETION & CERTIFICATE SCREEN -->
+            <section id="completion-screen" class="hidden p-6 sm:p-10 text-center flex flex-col items-center">
+                <div class="w-24 h-24 bg-gradient-to-br from-amber-400 to-yellow-600 rounded-full flex items-center justify-center text-5xl mb-4 gold-glow border-4 border-amber-200">
+                    🏆
+                </div>
+                <h2 class="text-3xl font-black text-amber-400 mb-2">ألف مبروك أيها البطل!</h2>
+                <p class="text-slate-300 text-sm sm:text-base mb-6">
+                    لقد أكملت جميع ألغاز منجم الجمع الذهبي بنجاح واستخرجت الكنز الأثمن!
+                </p>
+
+                <!-- Badge Display Box -->
+                <div class="bg-slate-800 border-2 border-amber-400/50 p-5 rounded-2xl mb-8 w-full max-w-sm flex items-center gap-4 shadow-xl">
+                    <div class="text-5xl">🎖️</div>
+                    <div class="text-right">
+                        <div class="text-xs text-amber-300 font-bold">شارة الإنجاز المكتسبة</div>
+                        <div class="text-lg font-black text-white">بطل الجمع</div>
+                        <div class="text-[11px] text-slate-400">منحت لـ: <span id="badge-owner" class="text-amber-200 font-bold">اسم الطالب</span></div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-3 justify-center w-full max-w-md no-print">
+                    <button onclick="openCertificateModal()" 
+                        class="flex-1 min-w-[140px] py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black rounded-xl shadow-lg hover:brightness-110 transition">
+                        📜 عرض الشهادة
+                    </button>
+                    <button onclick="printCertificate()" 
+                        class="flex-1 min-w-[140px] py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow transition">
+                        🖨️ طباعة / PDF
+                    </button>
+                    <button onclick="resetGame()" 
+                        class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-bold rounded-xl border border-slate-700 transition">
+                        🔄 إعادة اللعب
+                    </button>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- CERTIFICATE MODAL -->
+    <div id="certificate-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50 overflow-y-auto">
+        <div class="bg-slate-900 border-4 border-amber-500 w-full max-w-2xl rounded-3xl p-6 sm:p-10 shadow-2xl relative text-slate-900 bg-gradient-to-br from-amber-50 via-white to-amber-100">
+            <!-- Close Modal Button -->
+            <button onclick="closeCertificateModal()" class="absolute top-4 left-4 text-slate-500 hover:text-slate-800 text-2xl font-bold no-print">✖</button>
+
+            <!-- Certificate Header -->
+            <div class="text-center border-b-2 border-amber-400 pb-4 mb-6">
+                <div class="text-xs font-bold text-amber-700 mb-1">برنامج الرياضيات عالمي الممتع - الفصل الدراسي الثاني</div>
+                <h3 class="text-2xl sm:text-3xl font-black text-amber-800 mb-1">شهادة بطل الجمع</h3>
+                <p class="text-xs text-slate-600">تمنح هذه الشهادة فخراً واعتزازاً للطالب(ة) المجتهد(ة):</p>
+            </div>
+
+            <!-- Student Name Highlight -->
+            <div class="text-center my-6">
+                <span id="cert-student-name" class="text-2xl sm:text-3xl font-black text-slate-900 border-b-4 border-amber-500 pb-1 px-4 inline-block">
+                    اسم الطالب الثلاثي
+                </span>
+            </div>
+
+            <!-- Certificate Body Text -->
+            <p class="text-center text-sm sm:text-base text-slate-700 leading-relaxed mb-8">
+                لاجتياز كافة ألغاز وتحديات <strong>«منجم الجمع الذهبي»</strong> بمهارة فائقة وإتقان تام لمهارات الجمع متعدد المنازل وحل المسائل الحياتية للصف الثالث الابتدائي.
+            </p>
+
+            <!-- Signatures / Footer -->
+            <div class="flex justify-between items-center pt-6 border-t border-amber-200 text-xs sm:text-sm font-bold text-slate-800">
+                <div class="text-center">
+                    <div class="text-slate-500 text-[11px]">معلمة المادة</div>
+                    <div class="text-amber-900 font-black mt-1">نهلة يحيى القاضي</div>
+                </div>
+                <div class="text-center bg-amber-200/50 px-4 py-2 rounded-xl border border-amber-300">
+                    <span class="text-amber-800 text-xs">⭐ تم الإنجاز بنجاح ⭐</span>
+                </div>
+                <div class="text-center">
+                    <div class="text-slate-500 text-[11px]">مديرة المدرسة</div>
+                    <div class="text-amber-900 font-black mt-1">عبير حمود فرحان</div>
+                </div>
+            </div>
+
+            <!-- Modal Action Buttons (No-print) -->
+            <div class="mt-8 flex gap-3 justify-center no-print">
+                <button onclick="printCertificate()" class="px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl shadow">
+                    🖨️ طباعة الشهادة أو حفظ PDF
+                </button>
+                <button onclick="closeCertificateModal()" class="px-6 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-xl">
+                    إغلاق
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State Variables
+        let studentName = "";
+        let currentPuzzleIndex = 0;
+        let score = 0;
+        let stars = 0;
+
+        // 5 Puzzles tailored for 3rd Grade 2nd Term Addition (Multi-digit, regrouping, word problems)
+        const puzzles = [
+            {
+                id: 1,
+                category: "الجمع البسيط المتعدد المنازل",
+                question: "اكتشف صندوق الذهب الأول: ما هو ناتج جمع العددين <span class='text-amber-300 font-bold'>342 + 256</span>؟",
+                type: "choice",
+                choices: ["598", "588", "698", "578"],
+                correct: "598",
+                explanation: "أحسنت! 2 + 6 = 8، 4 + 5 = 9، و3 + 2 = 5، إذن الناتج الصحيح هو 598.",
+                hint: "تذكر أن تجمع الآحاد مع الآحاد، العشرات مع العشرات، والمئات مع المئات بكل مرتبة على حدة!"
+            },
+            {
+                id: 2,
+                category: "إعادة التجميع (الحمل) في العشرات",
+                question: "عربة التعدين بحاجة لقطع ذهب إضافية: أوجد ناتج جمع <span class='text-amber-300 font-bold'>465 + 273</span> مع إعادة التجميع عند الحاجة:",
+                type: "choice",
+                choices: ["738", "638", "728", "748"],
+                correct: "738",
+                explanation: "رائع! 5 + 3 = 8 آحاد. وفي العشرات: 6 + 7 = 13 (نكتب 3 ونعيد تجميع 1 إلى المئات). وفي المئات: 4 + 2 + 1 = 7 مئات. الناتج هو 738.",
+                hint: "في العشرات 6 + 7 = 13، تذكر أن تكتب 3 وتعيد تجميع 1 إلى منزلة المئات!"
+            },
+            {
+                id: 3,
+                category: "مسألة حياتية تطبيقية (أسعار التسوق)",
+                question: "اشترى بطل المستكشفين فانوساً من المنجم بـ <span class='text-amber-300 font-bold'>385</span> ريالاً، وخريطة أثرية بـ <span class='text-amber-300 font-bold'>247</span> ريالاً. ما هو إجمالي المبلغ الذي دفعه؟",
+                type: "choice",
+                choices: ["622", "632", "532", "612"],
+                correct: "632",
+                explanation: "ممتاز! نجمع 385 + 247: الآحاد (5+7=12، نكتب 2 ونعيد تجميع 1)، العشرات (8+4+1=13، نكتب 3 ونعيد تجميع 1)، المئات (3+2+1=6). المجموع هو 632 ريالاً.",
+                hint: "اجمع ثمن الفانوس وثمن الخريطة مع الانتباه لإعادة التجميع في الآحاد والعشرات."
+            },
+            {
+                id: 4,
+                category: "تقدير نواتج الجمع",
+                question: "قرب العددين لأقرب مئة ثم اجمع للتقدير: قدر ناتج جمع <span class='text-amber-300 font-bold'>421 + 389</span>:",
+                type: "choice",
+                choices: ["800", "700", "900", "750"],
+                correct: "800",
+                explanation: "بطل! 421 تقرب إلى 400 (لأن العشرات 2 أصغر من 5)، و389 تقرب إلى 400 (لأن العشرات 8 أكبر من أو تساوى 5). إذن التقدير هو: 400 + 400 = 800.",
+                hint: "قرب كل عدد لأقرب مئة بالنظر لمنزلة العشرات أولاً، ثم اجمع العددين المقربين."
+            },
+            {
+                id: 5,
+                category: "المسألة الكبرى: فتح صندوق الكنز الذهبي",
+                question: "في الجولة الأخيرة بالمنجم، جمع الفريق الأول <span class='text-amber-300 font-bold'>538</span> قطعة ذهبية، وجمع الفريق الثاني <span class='text-amber-300 font-bold'>376</span> قطعة. كم مجموع القطع الكلي التي جمعها الفريقان معاً؟",
+                type: "choice",
+                choices: ["914", "904", "814", "924"],
+                correct: "914",
+                explanation: "أبدعت وصنعت الإنجاز! 8+6=14 (4 ونعيد 1)، 3+7+1=11 (1 ونعيد 1)، 5+3+1=9. المجموع الكلي 914 قطعة ذهبية لفتح الكنز الأخير!",
+                hint: "اجمع الآحاد (8+6)، ثم العشرات (3+7+1)، ثم المئات (5+3+1) بعناية فائقة."
+            }
+        ];
+
+        // Start Form Submission Listener
+        document.getElementById('start-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('student-name').value.trim();
+            if(!nameInput) return;
+            
+            studentName = nameInput;
+            document.getElementById('display-student-name').textContent = studentName;
+            document.getElementById('badge-owner').textContent = studentName;
+            document.getElementById('cert-student-name').textContent = studentName;
+
+            // Transition screens
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+
+            loadPuzzle();
+        });
+
+        // Load Puzzle Function
+        function loadPuzzle() {
+            if (currentPuzzleIndex >= puzzles.length) {
+                showCompletionScreen();
+                return;
+            }
+
+            const puzzle = puzzles[currentPuzzleIndex];
+            document.getElementById('puzzle-number').textContent = `اللغز ${currentPuzzleIndex + 1} من ${puzzles.length}`;
+            document.getElementById('puzzle-category').textContent = puzzle.category;
+            document.getElementById('puzzle-question').innerHTML = puzzle.question;
+
+            // Reset feedback and next button
+            const feedbackArea = document.getElementById('feedback-area');
+            feedbackArea.classList.add('hidden');
+            feedbackArea.className = "hidden p-4 rounded-xl text-sm font-semibold transition-all";
+            document.getElementById('next-puzzle-btn').classList.add('hidden');
+
+            // Render choices
+            const answersArea = document.getElementById('answers-area');
+            answersArea.innerHTML = '';
+
+            puzzle.choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = "w-full py-3.5 px-4 bg-slate-900 hover:bg-slate-700/80 border-2 border-slate-700 hover:border-amber-500 rounded-xl text-white font-bold text-lg transition text-center shadow";
+                btn.textContent = choice;
+                btn.onclick = () => checkAnswer(choice, puzzle.correct, puzzle.explanation, puzzle.hint);
+                answersArea.appendChild(btn);
+            });
+
+            updateProgressVisual();
+        }
+
+        // Check Answer Logic
+        function checkAnswer(selected, correct, explanation, hint) {
+            const feedbackArea = document.getElementById('feedback-area');
+            const answerButtons = document.querySelectorAll('#answers-area button');
+
+            // Disable all choices after click
+            answerButtons.forEach(b => b.disabled = true);
+
+            if (selected === correct) {
+                // Correct Answer
+                score++;
+                stars += 2;
+                document.getElementById('score-counter').textContent = score;
+                document.getElementById('stars-counter').textContent = stars;
+
+                feedbackArea.className = "p-4 rounded-xl text-sm font-semibold bg-emerald-950/80 border border-emerald-500/50 text-emerald-200 block";
+                feedbackArea.innerHTML = `<strong>إجابة صحيحة وموفقة! 🌟</strong><br>${explanation}`;
+
+                // Show next button
+                document.getElementById('next-puzzle-btn').classList.remove('hidden');
+            } else {
+                // Incorrect Answer - Allow retry with hint
+                feedbackArea.className = "p-4 rounded-xl text-sm font-semibold bg-rose-950/80 border border-rose-500/50 text-rose-200 block";
+                feedbackArea.innerHTML = `<strong>محاولة جيدة ولكنها غير صحيحة. 💡 تلميح:</strong> ${hint}<br><span class='text-amber-300 text-xs mt-1 block'>حاول مرة أخرى واختار الإجابة الصحيحة!</span>`;
+
+                // Re-enable buttons for retry
+                answerButtons.forEach(b => b.disabled = false);
+            }
+        }
+
+        // Proceed to next puzzle
+        function nextPuzzle() {
+            currentPuzzleIndex++;
+            loadPuzzle();
+        }
+
+        // Update progress visual indicators
+        function updateProgressVisual() {
+            const percentage = (currentPuzzleIndex / (puzzles.length - 1)) * 100;
+            document.getElementById('progress-line').style.width = percentage + '%';
+
+            for (let i = 1; i <= puzzles.length; i++) {
+                const node = document.getElementById(`node-${i}`);
+                if (i <= currentPuzzleIndex) {
+                    node.textContent = "⭐";
+                    node.className = "w-10 h-10 rounded-full bg-amber-500 text-slate-950 font-bold border-2 border-amber-300 flex items-center justify-center text-lg shadow-lg";
+                } else if (i === currentPuzzleIndex + 1) {
+                    node.textContent = i === 5 ? "👑" : "🔑";
+                    node.className = "w-10 h-10 rounded-full bg-slate-800 border-2 border-amber-400 text-amber-300 flex items-center justify-center text-lg shadow gold-glow animate-pulse";
+                }
+            }
+        }
+
+        // Completion Screen
+        function showCompletionScreen() {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('completion-screen').classList.remove('hidden');
+        }
+
+        // Certificate Modal Actions
+        function openCertificateModal() {
+            document.getElementById('certificate-modal').classList.remove('hidden');
+            document.getElementById('certificate-modal').classList.add('flex');
+        }
+
+        function closeCertificateModal() {
+            document.getElementById('certificate-modal').classList.add('hidden');
+            document.getElementById('certificate-modal').classList.remove('flex');
+        }
+
+        function printCertificate() {
+            openCertificateModal();
+            setTimeout(() => {
+                window.print();
+            }, 300);
+        }
+
+        // Reset Game
+        function resetGame() {
+            currentPuzzleIndex = 0;
+            score = 0;
+            stars = 0;
+            document.getElementById('score-counter').textContent = score;
+            document.getElementById('stars-counter').textContent = stars;
+            document.getElementById('completion-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+            document.getElementById('student-name').value = '';
+        }
+    </script>
+</body>
+</html>
